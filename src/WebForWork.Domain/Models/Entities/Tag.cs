@@ -7,10 +7,9 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Models.Entities
 {
-    public class Base
+    public class Tag : BaseEntity<TagId>
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public List<Tag> Tags { get; set; }
+        public List<Article> Articles { get; } = new();
+        public List<Chapter> Chapters { get; } = new();
     }
 }

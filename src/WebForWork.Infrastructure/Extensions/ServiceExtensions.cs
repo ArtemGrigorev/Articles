@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebForWork.Domain.Models.ValueObject
+namespace WebForWork.Infrastructure.Extensions
 {
-    public record Tag (string Name)
+    internal class ServiceExtensions
     {
     }
 }
