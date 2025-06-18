@@ -26,11 +26,9 @@ namespace WebForWork.Infrastructure.Configurations
                    .WithMany(e => e.Articles)
                    .UsingEntity(
                    "article_tag",
-                   r => r.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
-                   l => l.HasOne(typeof(Article)).WithMany().HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)),
-                   j => j.HasKey("articleId", "tagId"));
-
-
+                   t => t.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
+                   a => a.HasOne(typeof(Article)).WithMany().HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)),
+                   ta => ta.HasKey("tagId", "articleId"));
 
             builder.Property(x => x.CreateDate).IsRequired().HasColumnName("create_date");
             builder.Property(x => x.UpdateDate).HasColumnName("update_date");

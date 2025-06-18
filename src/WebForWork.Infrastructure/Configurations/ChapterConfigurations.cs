@@ -27,8 +27,8 @@ namespace WebForWork.Infrastructure.Configurations
                    .UsingEntity(
                    "chapter_tag",
                    r => r.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
-                   l => l.HasOne(typeof(Chapter)).WithMany().HasForeignKey("articleId").HasPrincipalKey(nameof(Chapter.Id)),
-                   j => j.HasKey("chapterId", "tagId"));
+                   c => c.HasOne(typeof(Chapter)).WithMany().HasForeignKey("chapterId").HasPrincipalKey(nameof(Chapter.Id)),
+                   tc => tc.HasKey("tagId", "chapterId"));
 
         }
     }

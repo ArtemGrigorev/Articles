@@ -6,6 +6,11 @@ namespace WebForWork.Infrastructure
     {
         public const string SchemeName = "webforwork";
 
+        public WebForWorkDbContext(DbContextOptions<WebForWorkDbContext> options) : base(options) 
+        {
+
+        }    
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
