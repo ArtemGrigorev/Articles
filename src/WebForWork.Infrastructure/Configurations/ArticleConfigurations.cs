@@ -21,7 +21,10 @@ namespace WebForWork.Infrastructure.Configurations
                 .HasConversion(id => id.Value,
                 value => new ArticleId(value))
                 .IsRequired();
-
+            builder.Property(x => x.Name)
+             .IsRequired()
+             .HasColumnName("name")
+             .HasMaxLength(256);
             builder.HasMany(e => e.Tags)
                    .WithMany(e => e.Articles)
                    .UsingEntity(
@@ -29,7 +32,6 @@ namespace WebForWork.Infrastructure.Configurations
                    t => t.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
                    a => a.HasOne(typeof(Article)).WithMany().HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)),
                    ta => ta.HasKey("tagId", "articleId"));
-
             builder.Property(x => x.CreateDate).IsRequired().HasColumnName("create_date");
             builder.Property(x => x.UpdateDate).HasColumnName("update_date");
         }

@@ -21,7 +21,10 @@ namespace WebForWork.Infrastructure.Configurations
                 .HasConversion(id => id.Value,
                 value => new ChapterId(value))
                 .IsRequired();
-
+            builder.Property(x => x.Name)
+                         .IsRequired()
+                         .HasColumnName("name")
+                         .HasMaxLength(1024);
             builder.HasMany(e => e.Tags)
                    .WithMany(e => e.Chapters)
                    .UsingEntity(
@@ -29,7 +32,6 @@ namespace WebForWork.Infrastructure.Configurations
                    r => r.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
                    c => c.HasOne(typeof(Chapter)).WithMany().HasForeignKey("chapterId").HasPrincipalKey(nameof(Chapter.Id)),
                    tc => tc.HasKey("tagId", "chapterId"));
-
         }
     }
 }

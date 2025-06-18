@@ -22,7 +22,11 @@ namespace WebForWork.Infrastructure.Configurations
                 .HasConversion(id => id.Value,
                 value => new TagId(value))
                 .IsRequired();
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(256);
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasColumnName("name")
+                .HasMaxLength(256);
+            builder.HasIndex(x => x.Name).IsUnique();
         }
     }
 }
