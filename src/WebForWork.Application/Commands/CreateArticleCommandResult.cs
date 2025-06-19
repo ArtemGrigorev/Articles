@@ -10,6 +10,6 @@ namespace WebForWork.Application.Commands
     {
         public Guid ID { get; set; }
 
-        public string Message { get; set; }
+        public string MessageError { get; set; }
     }
 }

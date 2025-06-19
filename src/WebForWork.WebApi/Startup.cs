@@ -11,7 +11,6 @@ namespace WebForWork.WebApi
         {
             builder.Services.RegisterDatabaseStore(builder.Configuration);
             builder.Services.AddSingleton(TimeProvider.System);
-            builder.Services.AddScoped<IArticleRepositories, ArticleRepositories>();
             builder.Services.RegisterMediatR();
         }
     }

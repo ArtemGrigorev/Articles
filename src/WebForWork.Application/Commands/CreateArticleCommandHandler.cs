@@ -15,26 +15,34 @@ namespace WebForWork.Application.Commands
     {
         private readonly TimeProvider _timeProvider;
         private readonly IArticleRepositories _articleRepositories;
-        public CreateArticleCommandHandler(TimeProvider timeProvider, IArticleRepositories articleRepositories) 
+        private readonly IUnitOfWork _unitOfWork;
+        public CreateArticleCommandHandler(TimeProvider timeProvider, IArticleRepositories articleRepositories, IUnitOfWork unitOfWork) 
         {
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
             _articleRepositories = articleRepositories ?? throw new ArgumentNullException(nameof(articleRepositories));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
         public async Task<CreateArticleCommandResult> Handle(CreateArticleCommand request, CancellationToken cancellationToken)
         {
+            var result = new CreateArticleCommandResult();
             try
             {
-                var article = Article.Create(request.Tags,request.Name,_timeProvider);
+                var article = Article.Create(request.Tags, request.Name, _timeProvider);
                 article.AddDomainEvents(new CreatedArticleEvent(article.Id));
                 await _articleRepositories.AddArticleAsync(article, cancellationToken);
+                await _unitOfWork.SaveChangesAsync();
 
-                // вызов репозитория
-                // сохранение юнитом
+                // сохранение юнитом и запуск интерцепторов
+
+                result.ID = article.Id.Value;
+
             }
             catch (Exception ex)
             {
 
             }
+
+            return result;
         }
     }
 }

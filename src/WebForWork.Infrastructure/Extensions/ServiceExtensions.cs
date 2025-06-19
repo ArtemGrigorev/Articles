@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebForWork.Domain.Repositories;
 using WebForWork.Infrastructure.Intrceptors;
+using WebForWork.Infrastructure.Repositories;
 
 namespace WebForWork.Infrastructure.Extensions
 {
@@ -16,6 +18,8 @@ namespace WebForWork.Infrastructure.Extensions
     {
         public static void RegisterDatabaseStore(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WebForWorkDbContext>());
+            services.AddScoped<IArticleRepositories, ArticleRepositories>();
             services.AddScoped<PublishDomainEventsInterceptors>();
             services.AddDbContext<WebForWorkDbContext>((sp, opt) => 
             {

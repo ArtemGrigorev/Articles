@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebForWork.Domain.Models.Entities;
+using WebForWork.Domain.Repositories;
 
 namespace WebForWork.Infrastructure
 {
-    public class WebForWorkDbContext : DbContext
+    public class WebForWorkDbContext : DbContext, IUnitOfWork
     {
         public const string SchemeName = "webforwork";
 
