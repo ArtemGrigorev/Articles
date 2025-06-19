@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebForWork.Application\WebForWork.Application.csproj" />
     <ProjectReference Include="..\WebForWork.Infrastructure\WebForWork.Infrastructure.csproj" />
   </ItemGroup>
 

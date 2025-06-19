@@ -1,4 +1,5 @@
-﻿using WebForWork.Infrastructure.Extensions;
+﻿using WebForWork.Application.Extensions;
+using WebForWork.Infrastructure.Extensions;
 
 namespace WebForWork.WebApi
 {
@@ -7,6 +8,7 @@ namespace WebForWork.WebApi
         internal static void ConfigureServices(WebApplicationBuilder builder)
         {
             builder.Services.RegisterDatabaseStore(builder.Configuration);
+            builder.Services.RegisterMediatR();
         }
     }
 }
