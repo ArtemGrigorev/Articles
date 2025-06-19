@@ -22,7 +22,6 @@ namespace WebForWork.Infrastructure.Configurations
                     value => new ChapterId(value))
                    .IsRequired();
             builder.Property(x => x.Name)
-                   .IsRequired()
                    .HasColumnName("name")
                    .HasConversion(name => name.Value,
                     value => new ChapterName(value))

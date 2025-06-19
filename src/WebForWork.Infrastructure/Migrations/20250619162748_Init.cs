@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebForWork.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,7 @@ namespace WebForWork.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     update_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,7 +35,7 @@ namespace WebForWork.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,7 +48,7 @@ namespace WebForWork.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,6 +120,13 @@ namespace WebForWork.Infrastructure.Migrations
                 schema: "webforwork",
                 table: "chapter_tag",
                 column: "chapterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tags_name",
+                schema: "webforwork",
+                table: "tags",
+                column: "name",
+                unique: true);
         }
 
         /// <inheritdoc />

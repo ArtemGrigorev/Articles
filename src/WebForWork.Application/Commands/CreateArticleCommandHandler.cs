@@ -35,8 +35,6 @@ namespace WebForWork.Application.Commands
             {
 
             }
-
-            throw new NotImplementedException();
         }
     }
 }

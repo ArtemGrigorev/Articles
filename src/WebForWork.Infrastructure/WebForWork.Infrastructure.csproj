@@ -22,4 +22,8 @@
     <ProjectReference Include="..\WebForWork.Domain\WebForWork.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

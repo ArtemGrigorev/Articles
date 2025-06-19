@@ -10,23 +10,19 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Models.Entities
 {
-    public class Article : Entity<ArticleId, ArticleName>
+    public sealed class Article : Entity<ArticleId, ArticleName>
     {
         const int invariantCountMaxTags = 256;
         const int invariantLengthMaxName = 256;
 
-        //private readonly TimeProvider _timeProvider;
         public DateTime CreateDate { get; private set; }
         public DateTime UpdateDate { get; private set; }
 
         public List<Tag> Tags { get; private set; } = new();
 
-        public Article(ArticleId articleId,
-            ArticleName articleName
-            //TimeProvider timeProvider
-            ) : base(articleId, articleName)
+        private Article(ArticleId id, ArticleName name) : base(id, name)
         {
-            // _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+
         }
 
         public static Article Create(IEnumerable<string> tags, string name, TimeProvider timeProvider)

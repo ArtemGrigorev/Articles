@@ -12,8 +12,8 @@ using WebForWork.Infrastructure;
 namespace WebForWork.Infrastructure.Migrations
 {
     [DbContext(typeof(WebForWorkDbContext))]
-    [Migration("20250618145002_adduniq")]
-    partial class adduniq
+    [Migration("20250619162748_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

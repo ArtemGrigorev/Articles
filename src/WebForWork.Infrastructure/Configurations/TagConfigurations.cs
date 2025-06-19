@@ -25,6 +25,8 @@ namespace WebForWork.Infrastructure.Configurations
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasColumnName("name")
+                .HasConversion(name => name.Value,
+                 value => new TagName(value))
                 .HasMaxLength(256);
             builder.HasIndex(x => x.Name).IsUnique();
         }

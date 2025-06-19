@@ -21,8 +21,14 @@ namespace WebForWork.Infrastructure.Repositories
 
             if (cancellationToken.IsCancellationRequested)
                 return;
-
-            await _context.Articles.AddAsync(article);
+            try
+            {
+                await _context.Articles.AddAsync(article);
+            }
+            catch (Exception ex) 
+            { 
+            
+            }
         }
     }
 }
