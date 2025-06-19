@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebForWork.Infrastructure.Intrceptors;
 
 namespace WebForWork.Infrastructure.Extensions
 {
@@ -15,6 +16,7 @@ namespace WebForWork.Infrastructure.Extensions
     {
         public static void RegisterDatabaseStore(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<PublishDomainEventsInterceptors>();
             services.AddDbContext<WebForWorkDbContext>((sp, opt) => 
             {
                 opt.UseNpgsql(configuration.GetConnectionString("DatabaseSettings"),
@@ -22,6 +24,7 @@ namespace WebForWork.Infrastructure.Extensions
                 {
                     contexOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, WebForWorkDbContext.SchemeName);
                 });
+                opt.AddInterceptors(sp.GetRequiredService<PublishDomainEventsInterceptors>());
             });
         }
 

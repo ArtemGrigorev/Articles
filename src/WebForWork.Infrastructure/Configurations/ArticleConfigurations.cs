@@ -22,9 +22,11 @@ namespace WebForWork.Infrastructure.Configurations
                 value => new ArticleId(value))
                 .IsRequired();
             builder.Property(x => x.Name)
-             .IsRequired()
-             .HasColumnName("name")
-             .HasMaxLength(256);
+               .HasColumnName("name")
+               .HasConversion(name => name.Value,
+               value => new ArticleName(value))
+               .IsRequired()
+               .HasMaxLength(256);
             builder.HasMany(e => e.Tags)
                    .WithMany(e => e.Articles)
                    .UsingEntity(

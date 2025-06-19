@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebForWork.Domain.Models.ValueObject
 {
-    public record ArticleName(string Name);
+    public record ArticleName(string Value);
 }

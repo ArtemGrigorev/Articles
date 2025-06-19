@@ -22,6 +22,7 @@ namespace WebForWork.Infrastructure.Intrceptors
         public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, 
             InterceptionResult<int> result, CancellationToken cancellationToken = default(CancellationToken))
         {
+            await PublishDomainEventsAsync(eventData.Context);
             return await base.SavingChangesAsync(eventData, result, cancellationToken).ConfigureAwait(false);
         }
 
@@ -45,7 +46,10 @@ namespace WebForWork.Infrastructure.Intrceptors
             entitiesWithDomainEvents.ForEach(entry => entry.ClearDomainEvents());
             var publishEndpoint = _serviceProvider.GetRequiredService<IPublisher>();
 
-
+            foreach (var domainEvent in domainEvents)
+            {
+                await publishEndpoint.Publish(domainEvent);
+            }
         }
     }
 }

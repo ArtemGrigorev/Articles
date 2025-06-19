@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,9 +10,8 @@ namespace WebForWork.Domain.Events
 {
     public interface IHasDomainEvents
     {
-       public ICollection<IDomainEvents> DomainEvents { get; }
-
+       public ICollection<INotification> DomainEvents { get; }
        public void ClearDomainEvents();
-       public void AddDomainEvents(IDomainEvents domainEvents);
+       public void AddDomainEvents(INotification domainEvents);
     }
 }

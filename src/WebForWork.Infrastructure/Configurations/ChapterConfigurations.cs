@@ -17,14 +17,17 @@ namespace WebForWork.Infrastructure.Configurations
             builder.ToTable("chapters");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                .HasColumnName("id")
-                .HasConversion(id => id.Value,
-                value => new ChapterId(value))
-                .IsRequired();
+                   .HasColumnName("id")
+                   .HasConversion(id => id.Value,
+                    value => new ChapterId(value))
+                   .IsRequired();
             builder.Property(x => x.Name)
-                         .IsRequired()
-                         .HasColumnName("name")
-                         .HasMaxLength(1024);
+                   .IsRequired()
+                   .HasColumnName("name")
+                   .HasConversion(name => name.Value,
+                    value => new ChapterName(value))
+                   .IsRequired()
+                   .HasMaxLength(1024);
             builder.HasMany(e => e.Tags)
                    .WithMany(e => e.Chapters)
                    .UsingEntity(

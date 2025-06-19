@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebForWork.Domain.Models.ValueObject
 {
-    public record ChapterName(string Name);
+    public record ChapterName(string Value);
 }
