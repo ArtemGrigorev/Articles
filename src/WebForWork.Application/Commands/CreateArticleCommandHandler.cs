@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using WebForWork.Domain.Events;
 using WebForWork.Domain.Models.Entities;
 using WebForWork.Domain.Repositories;
 
@@ -24,8 +25,9 @@ namespace WebForWork.Application.Commands
             try
             {
                 var article = Article.Create(request.Tags,request.Name,_timeProvider);
-
+                article.AddDomainEvents(new CreatedArticleEvent(article.Id));
                 await _articleRepositories.AddArticleAsync(article, cancellationToken);
+
                 // вызов репозитория
                 // сохранение юнитом
             }
