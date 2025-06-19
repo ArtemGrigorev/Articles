@@ -7,7 +7,7 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Models.Entities
 {
-    public class Chapter: BaseEntity<ChapterId, ChapterName>
+    public class Chapter: Entity<ChapterId, ChapterName>
     {
         public Chapter(ChapterId id, ChapterName chapterName) : base(id, chapterName)
         {

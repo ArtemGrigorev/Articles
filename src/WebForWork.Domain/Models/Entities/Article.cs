@@ -10,7 +10,7 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Models.Entities
 {
-    public class Article : BaseEntity<ArticleId, ArticleName>
+    public class Article : Entity<ArticleId, ArticleName>
     {
         const int invariantCountMaxTags = 256;
         const int invariantLengthMaxName = 256;
