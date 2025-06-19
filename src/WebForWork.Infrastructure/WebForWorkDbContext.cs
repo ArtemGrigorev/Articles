@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebForWork.Domain.Models.Entities;
 
 namespace WebForWork.Infrastructure
 {
@@ -6,6 +7,7 @@ namespace WebForWork.Infrastructure
     {
         public const string SchemeName = "webforwork";
 
+        public DbSet<Article> Articles { get; set; }
         public WebForWorkDbContext(DbContextOptions<WebForWorkDbContext> options) : base(options) 
         {
 

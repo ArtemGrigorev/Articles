@@ -7,13 +7,14 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Models.Entities
 {
-    public abstract class BaseEntity<T>
+    public abstract class BaseEntity<T,K>
     {
-        public T Id { get; protected init; }
-        public string Name { get; private set; }
-
-   /*     private readonly List<TagId> _tag = new();
-        public IReadOnlyList<TagId> Tags => _tag.AsReadOnly();*/
-
+        public T Id { get; private init; }
+        public K Name { get; private init; }
+        protected BaseEntity(T id, K name)
+        {
+            Id = id;
+            Name = name;
+        }
     }
 }

@@ -1,4 +1,7 @@
-﻿using WebForWork.Infrastructure.Extensions;
+﻿using WebForWork.Application.Extensions;
+using WebForWork.Domain.Repositories;
+using WebForWork.Infrastructure.Extensions;
+using WebForWork.Infrastructure.Repositories;
 
 namespace WebForWork.WebApi
 {
@@ -7,6 +10,9 @@ namespace WebForWork.WebApi
         internal static void ConfigureServices(WebApplicationBuilder builder)
         {
             builder.Services.RegisterDatabaseStore(builder.Configuration);
+            builder.Services.AddSingleton(TimeProvider.System);
+            builder.Services.AddScoped<IArticleRepositories, ArticleRepositories>();
+            builder.Services.RegisterMediatR();
         }
     }
 }
