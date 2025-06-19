@@ -12,8 +12,8 @@ namespace WebForWork.Domain.Models.Entities
 {
     public sealed class Article : Entity<ArticleId, ArticleName>
     {
-        const int invariantCountMaxTags = 256;
-        const int invariantLengthMaxName = 256;
+        public const int invariantCountMaxTags = 256;
+        public const int invariantLengthMaxName = 256;
 
         public DateTime CreateDate { get; private set; }
         public DateTime UpdateDate { get; private set; }
@@ -29,12 +29,12 @@ namespace WebForWork.Domain.Models.Entities
         {
             if (tags.Count() > invariantCountMaxTags)
             {
-                throw new ArticleTagsException($"Количество тегов превышает допустимое значение = {invariantCountMaxTags}");
+                throw new ArticleTagsException($"Количество тегов превышает допустимое значение ValueMax = {invariantCountMaxTags}");
             }
 
             if (name.Length > invariantLengthMaxName)
             {
-                throw new ArticleNameException($"Длина имени превышает допустимое значение = {invariantCountMaxTags}");
+                throw new ArticleNameException($"Длина имени превышает допустимое значение ValueMax = {invariantCountMaxTags}");
             }
             Article article = new Article(new ArticleId(Guid.NewGuid()), new ArticleName(name));
             article.Tags = tags.Select(x => new Tag(new TagId(Guid.NewGuid()), new TagName(name))).ToList();
