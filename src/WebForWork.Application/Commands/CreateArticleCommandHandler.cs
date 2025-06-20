@@ -34,9 +34,7 @@ namespace WebForWork.Application.Commands
             {
 
                 var tags = await _tagRepositories.GetTagsByNamesAsync(request.Tags.ToList(), cancellationToken);
-
-
-                var article = Article.Create(request.Tags, request.Name, _timeProvider);
+                var article = Article.Create(tags, request.Tags, request.Name, _timeProvider);
                 article.AddDomainEvents(new CreatedArticleEvent(article.Id));
                 await _articleRepositories.AddArticleAsync(article, cancellationToken);
                 await _unitOfWork.SaveChangesAsync();

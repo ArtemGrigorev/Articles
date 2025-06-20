@@ -27,7 +27,7 @@ namespace WebForWork.Domain.Models.Aggregates
 
         }
 
-        public static Article Create(IList<Tag> tags, string name, TimeProvider timeProvider)
+        public static Article Create(IList<Tag> tags, IEnumerable<string> tagsNames, string name, TimeProvider timeProvider)
         {
             if (tags.Count() > invariantCountMaxTags)
             {
@@ -38,8 +38,14 @@ namespace WebForWork.Domain.Models.Aggregates
             {
                 throw new ArticleNameException($"Длина имени превышает допустимое значение ValueMax = {invariantLengthMaxName}");
             }
+
+            var exceptTags = tags.Select(t => t.Name.Value).ToList();
+            var noExceptTags = tagsNames.Except(exceptTags);
+            var newTags = noExceptTags.Select(x => Tag.Create(x)).ToList();
+            var sumTags = newTags.Union(tags);
             Article article = new Article(new ArticleId(Guid.NewGuid()), new ArticleName(name));
-            article.Tags = tags.Select(x => new Tag(new TagId(Guid.NewGuid()), new TagName(name))).ToList();
+            article.Tags = sumTags.Select(x => new ArticleTag() { article = article, tag = x }).ToList();
+            //(new TagId(Guid.NewGuid()), new TagName(name))).ToList();
             article.CreateDate = timeProvider.GetLocalNow().UtcDateTime;
 
             return article;
