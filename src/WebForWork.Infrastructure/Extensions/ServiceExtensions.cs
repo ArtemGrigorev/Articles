@@ -20,6 +20,7 @@ namespace WebForWork.Infrastructure.Extensions
         {
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WebForWorkDbContext>());
             services.AddScoped<IArticleRepositories, ArticleRepositories>();
+            services.AddScoped<ITagRepositories, TagRepositories>();
             services.AddScoped<PublishDomainEventsInterceptors>();
             services.AddDbContext<WebForWorkDbContext>((sp, opt) => 
             {

@@ -23,7 +23,7 @@ namespace WebForWork.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("WebForWork.Domain.Models.Entities.Article", b =>
+            modelBuilder.Entity("WebForWork.Domain.Models.Aggregates.Article", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -48,21 +48,19 @@ namespace WebForWork.Infrastructure.Migrations
                     b.ToTable("articles", "webforwork");
                 });
 
-            modelBuilder.Entity("WebForWork.Domain.Models.Entities.Chapter", b =>
+            modelBuilder.Entity("WebForWork.Domain.Models.Entities.ArticleTag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                    b.Property<Guid>("tagId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)")
-                        .HasColumnName("name");
+                    b.Property<Guid>("articleId")
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("tagId", "articleId");
 
-                    b.ToTable("chapters", "webforwork");
+                    b.HasIndex("articleId");
+
+                    b.ToTable("articles_tags", "webforwork");
                 });
 
             modelBuilder.Entity("WebForWork.Domain.Models.Entities.Tag", b =>
@@ -85,64 +83,33 @@ namespace WebForWork.Infrastructure.Migrations
                     b.ToTable("tags", "webforwork");
                 });
 
-            modelBuilder.Entity("article_tag", b =>
+            modelBuilder.Entity("WebForWork.Domain.Models.Entities.ArticleTag", b =>
                 {
-                    b.Property<Guid>("tagId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("articleId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("tagId", "articleId");
-
-                    b.HasIndex("articleId");
-
-                    b.ToTable("article_tag", "webforwork");
-                });
-
-            modelBuilder.Entity("chapter_tag", b =>
-                {
-                    b.Property<Guid>("tagId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("chapterId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("tagId", "chapterId");
-
-                    b.HasIndex("chapterId");
-
-                    b.ToTable("chapter_tag", "webforwork");
-                });
-
-            modelBuilder.Entity("article_tag", b =>
-                {
-                    b.HasOne("WebForWork.Domain.Models.Entities.Article", null)
-                        .WithMany()
+                    b.HasOne("WebForWork.Domain.Models.Aggregates.Article", "article")
+                        .WithMany("Tags")
                         .HasForeignKey("articleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebForWork.Domain.Models.Entities.Tag", null)
-                        .WithMany()
+                    b.HasOne("WebForWork.Domain.Models.Entities.Tag", "tag")
+                        .WithMany("Articles")
                         .HasForeignKey("tagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("article");
+
+                    b.Navigation("tag");
                 });
 
-            modelBuilder.Entity("chapter_tag", b =>
+            modelBuilder.Entity("WebForWork.Domain.Models.Aggregates.Article", b =>
                 {
-                    b.HasOne("WebForWork.Domain.Models.Entities.Chapter", null)
-                        .WithMany()
-                        .HasForeignKey("chapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Tags");
+                });
 
-                    b.HasOne("WebForWork.Domain.Models.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("tagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("WebForWork.Domain.Models.Entities.Tag", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

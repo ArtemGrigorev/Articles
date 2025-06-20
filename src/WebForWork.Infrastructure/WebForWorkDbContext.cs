@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebForWork.Domain.Models.Aggregates;
 using WebForWork.Domain.Models.Entities;
 using WebForWork.Domain.Repositories;
 
@@ -9,6 +10,7 @@ namespace WebForWork.Infrastructure
         public const string SchemeName = "webforwork";
 
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Tag> Tags { get; set; }
         public WebForWorkDbContext(DbContextOptions<WebForWorkDbContext> options) : base(options) 
         {
 

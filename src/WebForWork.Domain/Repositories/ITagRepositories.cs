@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebForWork.Domain.Models.Aggregates;
+using WebForWork.Domain.Models.Entities;
 
 namespace WebForWork.Domain.Repositories
 {
-    public interface IArticleRepositories 
+    public interface ITagRepositories
     {
-        Task AddArticleAsync(Article article, CancellationToken cancellationToken);
+        Task<List<Tag>> GetTagsByNamesAsync(IList<string> names, CancellationToken cancellationToken);
     }
 }

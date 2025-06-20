@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using WebForWork.Domain.Models.Aggregates;
 using WebForWork.Domain.Models.Entities;
 using WebForWork.Domain.Models.ValueObject;
 
@@ -27,15 +29,18 @@ namespace WebForWork.Infrastructure.Configurations
                value => new ArticleName(value))
                .IsRequired()
                .HasMaxLength(256);
-            builder.HasMany(e => e.Tags)
-                   .WithMany(e => e.Articles)
-                   .UsingEntity(
+            builder.Property(x => x.CreateDate).IsRequired().HasColumnName("create_date");
+            builder.Property(x => x.UpdateDate).HasColumnName("update_date");
+
+              /*     .UsingEntity(
+               *     
+               *     
+               *     
                    "article_tag",
                    t => t.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
                    a => a.HasOne(typeof(Article)).WithMany().HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)),
-                   ta => ta.HasKey("tagId", "articleId"));
-            builder.Property(x => x.CreateDate).IsRequired().HasColumnName("create_date");
-            builder.Property(x => x.UpdateDate).HasColumnName("update_date");
+                   ta => ta.HasKey("tagId", "articleId"));*/
+
         }
     }
 }

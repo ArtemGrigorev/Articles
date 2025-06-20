@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using WebForWork.Domain.Models.Entities;
+using WebForWork.Domain.Models.Aggregates;
 using WebForWork.WebApi.Models;
 
 namespace WebForWork.WebApi.Configurations
