@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace WebForWork.Infrastructure.Extensions
             services.AddScoped<IArticleRepositories, ArticleRepositories>();
             services.AddScoped<ITagRepositories, TagRepositories>();
             services.AddScoped<PublishDomainEventsInterceptors>();
+        //    db.GetService<ILoggerFactory>().AddProvider(new MyLoggerProvider());
+
             services.AddDbContext<WebForWorkDbContext>((sp, opt) => 
             {
                 opt.UseNpgsql(configuration.GetConnectionString("DatabaseSettings"),
@@ -30,6 +33,8 @@ namespace WebForWork.Infrastructure.Extensions
                     contexOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, WebForWorkDbContext.SchemeName);
                 });
                 opt.AddInterceptors(sp.GetRequiredService<PublishDomainEventsInterceptors>());
+                opt.UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>());
+
             });
         }
 

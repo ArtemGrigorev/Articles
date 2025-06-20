@@ -14,7 +14,9 @@ namespace WebForWork.Application.Commands
         {
 
             // TODO работа с агрегатом разделов, автоматическое создание
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            return Task.CompletedTask;
         }
     }
 }

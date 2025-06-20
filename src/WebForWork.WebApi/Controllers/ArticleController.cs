@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 using WebForWork.Application.Commands;
+using WebForWork.Domain.Events;
 using WebForWork.WebApi.Configurations;
 using WebForWork.WebApi.Models;
 
@@ -38,9 +39,12 @@ namespace WebForWork.WebApi.Controllers
             var commantTest = _mapper.Map<CreateArticleCommand>(createRequestModel);
 
             var command = new CreateArticleCommand() { Name = "Test", Tags = new Collection<string> { "test1", "test2" } };
-            var result = await _mediator.Send(command, cancellationToken);
+            var resultCommand = await _mediator.Send(command, cancellationToken);
+            var result = _mapper.Map<CreateResponseModel>(resultCommand);
+            if (string.IsNullOrEmpty(result.MessageError))
+                return Ok(result);
 
-            return new CreateResponseModel();
+            return StatusCode(StatusCodes.Status500InternalServerError,result);//BadRequest(result);
         }
     }
 }

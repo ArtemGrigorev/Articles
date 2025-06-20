@@ -18,8 +18,6 @@ namespace WebForWork.Domain.Models.Aggregates
 
         public DateTime CreateDate { get; private set; }
         public DateTime UpdateDate { get; private set; }
-
-       // public List<Tag> Tags { get; private set; } = new();
         public List<ArticleTag> Tags { get; private set; } = new();
 
         private Article(ArticleId id, ArticleName name) : base(id, name)
@@ -29,7 +27,7 @@ namespace WebForWork.Domain.Models.Aggregates
 
         public static Article Create(IList<Tag> tags, IEnumerable<string> tagsNames, string name, TimeProvider timeProvider)
         {
-            if (tags.Count() > invariantCountMaxTags)
+            if (tagsNames.Count() > invariantCountMaxTags)
             {
                 throw new ArticleTagsException($"Количество тегов превышает допустимое значение ValueMax = {invariantCountMaxTags}");
             }
@@ -44,8 +42,7 @@ namespace WebForWork.Domain.Models.Aggregates
             var newTags = noExceptTags.Select(x => Tag.Create(x)).ToList();
             var sumTags = newTags.Union(tags);
             Article article = new Article(new ArticleId(Guid.NewGuid()), new ArticleName(name));
-            article.Tags = sumTags.Select(x => new ArticleTag() { article = article, tag = x }).ToList();
-            //(new TagId(Guid.NewGuid()), new TagName(name))).ToList();
+            article.Tags = sumTags.Select((x,index) => new ArticleTag() { article = article, tag = x, order = index }).ToList();
             article.CreateDate = timeProvider.GetLocalNow().UtcDateTime;
 
             return article;

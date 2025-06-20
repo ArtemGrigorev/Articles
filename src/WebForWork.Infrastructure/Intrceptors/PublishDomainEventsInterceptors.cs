@@ -19,11 +19,11 @@ namespace WebForWork.Infrastructure.Intrceptors
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
-        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, 
-            InterceptionResult<int> result, CancellationToken cancellationToken = default(CancellationToken))
+
+        public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default(CancellationToken))
         {
             await PublishDomainEventsAsync(eventData.Context);
-            return await base.SavingChangesAsync(eventData, result, cancellationToken).ConfigureAwait(false);
+            return result;
         }
 
         private async Task PublishDomainEventsAsync(DbContext dbContext)

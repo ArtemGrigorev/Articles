@@ -46,7 +46,7 @@ namespace WebForWork.Application.Commands
             }
             catch (Exception ex)
             {
-
+                result.MessageError = ex.Message;
             }
 
             return result;

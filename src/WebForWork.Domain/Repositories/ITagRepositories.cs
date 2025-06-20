@@ -10,6 +10,6 @@ namespace WebForWork.Domain.Repositories
 {
     public interface ITagRepositories
     {
-        Task<List<Tag>> GetTagsByNamesAsync(IList<string> names, CancellationToken cancellationToken);
+        Task<List<Tag>> GetTagsByNamesAsync(List<string> names, CancellationToken cancellationToken);
     }
 }

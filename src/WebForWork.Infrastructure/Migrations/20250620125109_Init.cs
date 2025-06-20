@@ -48,7 +48,8 @@ namespace WebForWork.Infrastructure.Migrations
                 columns: table => new
                 {
                     articleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    tagId = table.Column<Guid>(type: "uuid", nullable: false)
+                    tagId = table.Column<Guid>(type: "uuid", nullable: false),
+                    order = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

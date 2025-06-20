@@ -16,8 +16,8 @@ namespace WebForWork.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<ArticleTag> builder)
         {
             builder.ToTable("articles_tags");
-           /* builder.Property(x => x.order)
-                   .HasColumnName("order");*/
+            builder.Property(x => x.order)
+                   .HasColumnName("order");
             builder.HasKey("tagId", "articleId");
             //  builder.HasOne(typeof(Article)).WithMany("ArticleTags").HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)).IsRequired();
             //  builder.HasOne(typeof(Tag)).WithMany("ArticleTags").HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)).IsRequired();

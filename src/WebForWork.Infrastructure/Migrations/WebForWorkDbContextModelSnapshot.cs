@@ -56,6 +56,10 @@ namespace WebForWork.Infrastructure.Migrations
                     b.Property<Guid>("articleId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("order")
+                        .HasColumnType("integer")
+                        .HasColumnName("order");
+
                     b.HasKey("tagId", "articleId");
 
                     b.HasIndex("articleId");

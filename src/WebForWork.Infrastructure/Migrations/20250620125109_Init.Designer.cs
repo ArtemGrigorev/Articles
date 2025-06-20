@@ -12,7 +12,7 @@ using WebForWork.Infrastructure;
 namespace WebForWork.Infrastructure.Migrations
 {
     [DbContext(typeof(WebForWorkDbContext))]
-    [Migration("20250620090018_Init")]
+    [Migration("20250620125109_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -58,6 +58,10 @@ namespace WebForWork.Infrastructure.Migrations
 
                     b.Property<Guid>("articleId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("order")
+                        .HasColumnType("integer")
+                        .HasColumnName("order");
 
                     b.HasKey("tagId", "articleId");
 
