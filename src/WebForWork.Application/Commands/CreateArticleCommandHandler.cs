@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebForWork.Domain.Events;
 using WebForWork.Domain.Models.Aggregates;
+using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
 
 namespace WebForWork.Application.Commands
@@ -33,7 +34,8 @@ namespace WebForWork.Application.Commands
             try
             {
 
-                var tags = await _tagRepositories.GetTagsByNamesAsync(request.Tags.ToList(), cancellationToken);
+                var tagNames = request.Tags.Select(x => new TagName(x));
+                var tags = await _tagRepositories.GetTagsByNamesAsync(tagNames, cancellationToken);
                 var article = Article.Create(tags, request.Tags, request.Name, _timeProvider);
                 article.AddDomainEvents(new CreatedArticleEvent(article.Id));
                 await _articleRepositories.AddArticleAsync(article, cancellationToken);

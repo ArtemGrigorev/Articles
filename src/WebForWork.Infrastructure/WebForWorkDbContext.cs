@@ -11,6 +11,7 @@ namespace WebForWork.Infrastructure
 
         public DbSet<Article> Articles { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
         public WebForWorkDbContext(DbContextOptions<WebForWorkDbContext> options) : base(options) 
         {
 

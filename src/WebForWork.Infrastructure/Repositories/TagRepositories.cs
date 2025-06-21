@@ -40,48 +40,20 @@ namespace WebForWork.Infrastructure.Repositories
                 throw new TagRepositoriesException("Ошибка добавления статьи в базу данных", ex);
             }
         }
-        private string s(Tag t)
-        {
-            return t.Name.Value;
-        }
       
-        public async Task<List<Tag>> GetTagsByNamesAsync(List<string> names, CancellationToken cancellationToken)
+        public async Task<List<Tag>> GetTagsByNamesAsync(IEnumerable<TagName> tagNames, CancellationToken cancellationToken)
         {
             var result = new List<Tag> { };
             if (cancellationToken.IsCancellationRequested)
                 return result;
+
             try
             {
-                // string values = 
-                /*  result = await _context.Tags
+                  result = await _context.Tags
                       .AsNoTracking()
-                      .Where(t => names.Contains(s(t)))
-                      .ToListAsync(cancellationToken);*/
-                //  NpgsqlParameter param = new NpgsqlParameter("@name", "%test1%");
+                      .Where(t => tagNames.Contains(t.Name))
+                      .ToListAsync(cancellationToken);
 
-                var columnValue =  "test1";
-                var sql = "SELECT id, name FROM webforwork.tags where name = @param";
-
-
-                /* NpgsqlParameter param = new NpgsqlParameter();
-                 param.ParameterName = "@Mark";
-                 param.Value = "test1";
-                 param.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar;*/
-                /*    result = await _context.Tags
-                        .FromSql($"SELECT id, name FROM webforwork.tags where @name = {columnValue}")
-                        .AsSplitQuery()
-                        .ToListAsync();*/
-                /* var customParam = new  { Prop1 = "value1", Prop2 = 42 };
-
-                 var searchParam = new NpgsqlParameter("searchParam", $"%test1%");
-                 var results = await _context.Tags
-                     .FromSqlInterpolated(sql).ToList();*/
-
-                //.FromSqlRaw("SELECT id, name FROM webforwork.tags where name = @searchParam;", searchParam).AsSplitQuery().ToListAsync();
-
-                string value = "3";
-                var searchParam = new NpgsqlParameter("searchParam", value);
-                var command = await _context.Tags.FromSqlRaw($"SELECT id, name FROM webforwork.tags where name = @searchParam;", searchParam).ToListAsync();
 
             }
             catch (Exception ex)

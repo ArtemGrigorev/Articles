@@ -8,6 +8,6 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Events
 {
-    public sealed record CreatedArticleEvent(ArticleId Article) : INotification;
+    public sealed record CreatedArticleEvent(ArticleId ArticleId) : INotification;
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
@@ -25,8 +26,21 @@ namespace WebForWork.Domain.Models.Aggregates
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <param name="tagsNames">Значение тегов в запросе</param>
+        /// <param name="name"></param>
+        /// <param name="timeProvider"></param>
+        /// <returns></returns>
+        /// <exception cref="ArticleTagsException"></exception>
+        /// <exception cref="ArticleNameException"></exception>
+        /// <exception cref="ArticleUniqeTagException"></exception>
         public static Article Create(IList<Tag> tags, IEnumerable<string> tagsNames, string name, TimeProvider timeProvider)
         {
+            
+
             if (tagsNames.Count() > invariantCountMaxTags)
             {
                 throw new ArticleTagsException($"Количество тегов превышает допустимое значение ValueMax = {invariantCountMaxTags}");
@@ -37,14 +51,34 @@ namespace WebForWork.Domain.Models.Aggregates
                 throw new ArticleNameException($"Длина имени превышает допустимое значение ValueMax = {invariantLengthMaxName}");
             }
 
-            var exceptTags = tags.Select(t => t.Name.Value).ToList();
-            var noExceptTags = tagsNames.Except(exceptTags);
-            var newTags = noExceptTags.Select(x => Tag.Create(x)).ToList();
+            if (tagsNames.Distinct().Count() != tagsNames.Count())
+            {
+                throw new ArticleUniqeTagException("Значения тегов в статье не уникально");
+            }
+            var existsTags = tags.Select(t => t.Name.Value).ToList();
+            var noExistsTags = tagsNames.Except(existsTags);
+            var newTags = noExistsTags.Select(x => Tag.Create(x)).ToList();
             var sumTags = newTags.Union(tags);
+            sumTags = sumTags.OrderBy(st => tagsNames.ToList().IndexOf(st.Name.Value)).ToList();
             Article article = new Article(new ArticleId(Guid.NewGuid()), new ArticleName(name));
-            article.Tags = sumTags.Select((x,index) => new ArticleTag() { article = article, tag = x, order = index }).ToList();
+            article.Tags = sumTags.Select((tag, index) => new ArticleTag()
+            {
+                article = article,
+                tag = newTags.Contains(tag) ? tag : null,
+                tagId = tag.Id,
+                order = index
+            }).ToList();
             article.CreateDate = timeProvider.GetLocalNow().UtcDateTime;
 
+            /*
+              article.Tags = (from st in sumTags
+                              select new ArticleTag()
+                              {
+                                  article = article,
+                                  tag = newTags.Contains(st) ? st : null,
+                                  tagId = st.Id,
+                              }).ToList();
+            */
             return article;
         }
     }

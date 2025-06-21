@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebForWork.Domain.Models.Aggregates;
+using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
+using WebForWork.Infrastructure.Exceptions;
 
 namespace WebForWork.Infrastructure.Repositories
 {
@@ -21,13 +24,35 @@ namespace WebForWork.Infrastructure.Repositories
 
             if (cancellationToken.IsCancellationRequested)
                 return;
+
             try
             {
                 await _context.Articles.AddAsync(article);
             }
             catch (Exception ex) 
-            { 
-            
+            {
+                throw new TagRepositoriesException($"Ошибка создания статьи Id {article.Id.Value}", ex);
+            }
+        }
+
+        public async Task<Article> GetArticleAsync(ArticleId articleId, CancellationToken cancellationToken)
+        {
+
+            if (cancellationToken.IsCancellationRequested)
+                return null; 
+
+            try
+            {
+                return await _context.Articles
+                    .AsNoTracking()
+                    .Where(x => x.Id == articleId)
+                    .Include(x => x.Tags)
+                      .ThenInclude(x => x.tag)
+                    .SingleAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new TagRepositoriesException($"Ошибка получения статьи Id {articleId.Value}", ex);
             }
         }
     }

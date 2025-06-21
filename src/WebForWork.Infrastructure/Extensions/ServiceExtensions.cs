@@ -22,8 +22,8 @@ namespace WebForWork.Infrastructure.Extensions
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WebForWorkDbContext>());
             services.AddScoped<IArticleRepositories, ArticleRepositories>();
             services.AddScoped<ITagRepositories, TagRepositories>();
+            services.AddScoped<IChapterRepositories, ChapterRepositories>();
             services.AddScoped<PublishDomainEventsInterceptors>();
-        //    db.GetService<ILoggerFactory>().AddProvider(new MyLoggerProvider());
 
             services.AddDbContext<WebForWorkDbContext>((sp, opt) => 
             {

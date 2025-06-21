@@ -36,10 +36,10 @@ namespace WebForWork.WebApi.Controllers
                 validationResult.AddToModelState(ModelState);
                 return ValidationProblem(ModelState);
             }
-            var commantTest = _mapper.Map<CreateArticleCommand>(createRequestModel);
+            var commant = _mapper.Map<CreateArticleCommand>(createRequestModel);
 
-            var command = new CreateArticleCommand() { Name = "Test", Tags = new Collection<string> { "test1", "test2" } };
-            var resultCommand = await _mediator.Send(command, cancellationToken);
+           // var commandTets = new CreateArticleCommand() { Name = "Test", Tags = new Collection<string> { "test1", "test2" } };
+            var resultCommand = await _mediator.Send(commant, cancellationToken);
             var result = _mapper.Map<CreateResponseModel>(resultCommand);
             if (string.IsNullOrEmpty(result.MessageError))
                 return Ok(result);

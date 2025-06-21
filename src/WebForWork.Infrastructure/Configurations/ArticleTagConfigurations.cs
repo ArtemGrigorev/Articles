@@ -19,11 +19,8 @@ namespace WebForWork.Infrastructure.Configurations
             builder.Property(x => x.order)
                    .HasColumnName("order");
             builder.HasKey("tagId", "articleId");
-            //  builder.HasOne(typeof(Article)).WithMany("ArticleTags").HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)).IsRequired();
-            //  builder.HasOne(typeof(Tag)).WithMany("ArticleTags").HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)).IsRequired();
-
-            builder.HasOne(x => x.article).WithMany(x => x.Tags).HasForeignKey("articleId");//.HasPrincipalKey(nameof(ArticleId.Value));//.HasForeignKey(x => x.articleId.Value);//.HasPrincipalKey(nameof(Article.Id)).IsRequired();
-            builder.HasOne(x => x.tag).WithMany(x => x.Articles).HasForeignKey("tagId");//.HasPrincipalKey(nameof(Tag.Id)).IsRequired();
+            builder.HasOne(x => x.article).WithMany(x => x.Tags).HasForeignKey("articleId");
+            builder.HasOne(x => x.tag).WithMany(x => x.Articles).HasForeignKey("tagId");
         }
     }
 }

@@ -14,5 +14,9 @@ namespace WebForWork.Domain.Exceptions
         {
         }
 
+        internal protected DomainException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
     }
 }

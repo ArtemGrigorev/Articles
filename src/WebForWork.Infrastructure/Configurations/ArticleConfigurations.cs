@@ -31,16 +31,6 @@ namespace WebForWork.Infrastructure.Configurations
                .HasMaxLength(256);
             builder.Property(x => x.CreateDate).IsRequired().HasColumnName("create_date");
             builder.Property(x => x.UpdateDate).HasColumnName("update_date");
-
-              /*     .UsingEntity(
-               *     
-               *     
-               *     
-                   "article_tag",
-                   t => t.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
-                   a => a.HasOne(typeof(Article)).WithMany().HasForeignKey("articleId").HasPrincipalKey(nameof(Article.Id)),
-                   ta => ta.HasKey("tagId", "articleId"));*/
-
         }
     }
 }

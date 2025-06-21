@@ -18,7 +18,7 @@ namespace WebForWork.Domain.Models.Entities
 
         public List<ArticleTag> Articles { get; private set; } = new();
         // public List<Article> Articles { get; } = new();
-        //   public List<ChapterTag> ChapterTags { get; } = new();
+        public List<ChapterTag> Chapters { get; private set; } = new();
         //  public List<Chapter> Chapters { get; } = new();
 
 

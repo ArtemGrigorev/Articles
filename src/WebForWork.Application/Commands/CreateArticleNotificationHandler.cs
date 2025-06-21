@@ -5,18 +5,64 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebForWork.Domain.Events;
+using WebForWork.Domain.Models.Aggregates;
+using WebForWork.Domain.Repositories;
 
 namespace WebForWork.Application.Commands
 {
     public class CreateArticleNotificationHandler : INotificationHandler<CreatedArticleEvent>
     {
-        public Task Handle(CreatedArticleEvent notification, CancellationToken cancellationToken)
+        private readonly IArticleRepositories _articleRepositories;
+        private readonly IChapterRepositories _chapterRepositories;
+        private readonly IUnitOfWork _unitOfWork;
+        public CreateArticleNotificationHandler(IArticleRepositories articleRepositories, 
+            IChapterRepositories chapterRepositories,
+            IUnitOfWork unitOfWork)
+        {
+            _articleRepositories = articleRepositories ?? throw new ArgumentNullException(nameof(articleRepositories));
+            _chapterRepositories = chapterRepositories ?? throw new ArgumentNullException(nameof(chapterRepositories)); 
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        }
+
+        public async Task Handle(CreatedArticleEvent notification, CancellationToken cancellationToken)
         {
 
-            // TODO работа с агрегатом разделов, автоматическое создание
-            //throw new NotImplementedException();
+            try
+            {
 
-            return Task.CompletedTask;
+                var article = await _articleRepositories.GetArticleAsync(notification.ArticleId, cancellationToken);
+                var tags = article.Tags.Select(x => x.tag);
+                var exist = _chapterRepositories.ExistChapterByTagsAsync(tags, cancellationToken);
+
+                if (!exist)
+                {
+                    var chapter = Chapter.Create(tags);
+                    await  _chapterRepositories.AddChapterAsync(chapter, cancellationToken);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+
+
+
+
+/*
+                Task task = new Task(() =>
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(1000);
+                        Console.WriteLine("Hello Task!");
+                    }
+                });
+
+                task.Start();*/
+                // TODO работа с агрегатом разделов, автоматическое создание
+                //throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
         }
     }
 }

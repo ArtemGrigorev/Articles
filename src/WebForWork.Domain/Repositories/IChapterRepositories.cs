@@ -9,8 +9,9 @@ using WebForWork.Domain.Models.ValueObject;
 
 namespace WebForWork.Domain.Repositories
 {
-    public interface ITagRepositories
+    public interface IChapterRepositories
     {
-        Task<List<Tag>> GetTagsByNamesAsync(IEnumerable<TagName> tagNames, CancellationToken cancellationToken);
+        Task AddChapterAsync(Chapter chapter, CancellationToken cancellationToken);
+        bool ExistChapterByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken);
     }
 }

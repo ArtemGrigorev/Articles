@@ -16,8 +16,8 @@ namespace WebForWork.Infrastructure.Configurations
         {
             builder.ToTable("chapters_tags");
             builder.HasKey("tagId", "chapterId");
-            builder.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id));
-            builder.HasOne(typeof(Chapter)).WithMany().HasForeignKey("chapterId").HasPrincipalKey(nameof(Chapter.Id));
+            builder.HasOne(x => x.chapter).WithMany(x => x.Tags).HasForeignKey("chapterId");
+            builder.HasOne(x => x.tag).WithMany(x => x.Chapters).HasForeignKey("tagId");
         }
     }
 }

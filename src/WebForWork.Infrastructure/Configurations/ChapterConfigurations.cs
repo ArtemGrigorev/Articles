@@ -28,14 +28,6 @@ namespace WebForWork.Infrastructure.Configurations
                     value => new ChapterName(value))
                    .IsRequired()
                    .HasMaxLength(1024);
-         
-            /*builder.HasMany(e => e.Tags)
-                   .WithMany(e => e.Chapters)
-                   .UsingEntity(
-                   "chapter_tag",
-                   r => r.HasOne(typeof(Tag)).WithMany().HasForeignKey("tagId").HasPrincipalKey(nameof(Tag.Id)),
-                   c => c.HasOne(typeof(Chapter)).WithMany().HasForeignKey("chapterId").HasPrincipalKey(nameof(Chapter.Id)),
-                   tc => tc.HasKey("tagId", "chapterId"));*/
         }
     }
 }
