@@ -64,18 +64,49 @@ namespace WebForWork.WebApi.Controllers
                 validationResult.AddToModelState(ModelState);
                 return ValidationProblem(ModelState);
             }
-            // var commant = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
+             var command = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
 
-            var commandTests = new UpdateArticleCommand() {
+          /*  var commandTests = new UpdateArticleCommand() {
                 Id = Guid.Parse("3054f219-758f-4366-8a06-b7345a58ad93"),
                 Name = "Test",
-                Tags = new Collection<string> { "test1", "test2" }
+                Tags = new Collection<string> { "test2", "test1", "test3" }
             };
-
-            await _mediator.Send(commandTests, cancellationToken);
+          */
+            await _mediator.Send(command, cancellationToken);
 
           //  var result = _mapper.Map<UpdateResponseModel>(resultCommand);
             return Ok(new UpdateResponseModel() {Message = "Статья обновленна" });
+            /* if (string.IsNullOrEmpty(result.MessageError))
+                 return Ok(result);
+
+             return StatusCode(StatusCodes.Status500InternalServerError, result);//BadRequest(result);*/
+        }
+
+
+        [HttpGet]
+        [ProducesResponseType(typeof(UpdateResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CreateResponseModel>> CreateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
+        {
+
+            var validationResult = await _validatorUpdateModel.ValidateAsync(updateRequestModel, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState);
+                return ValidationProblem(ModelState);
+            }
+            var command = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
+
+            /*  var commandTests = new UpdateArticleCommand() {
+                  Id = Guid.Parse("3054f219-758f-4366-8a06-b7345a58ad93"),
+                  Name = "Test",
+                  Tags = new Collection<string> { "test2", "test1", "test3" }
+              };
+            */
+            await _mediator.Send(command, cancellationToken);
+
+            //  var result = _mapper.Map<UpdateResponseModel>(resultCommand);
+            return Ok(new UpdateResponseModel() { Message = "Статья обновленна" });
             /* if (string.IsNullOrEmpty(result.MessageError))
                  return Ok(result);
 

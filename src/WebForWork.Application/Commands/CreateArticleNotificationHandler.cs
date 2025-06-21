@@ -30,7 +30,7 @@ namespace WebForWork.Application.Commands
             try
             {
 
-                var article = await _articleRepositories.GetArticleAsync(notification.ArticleId, cancellationToken);
+                var article = await _articleRepositories.GetArticleAsNoTrackingAsync(notification.ArticleId, cancellationToken);
                 var tags = article.Tags.Select(x => x.tag);
                 var exist = _chapterRepositories.ExistChapterByTagsAsync(tags, cancellationToken);
 
@@ -55,8 +55,7 @@ namespace WebForWork.Application.Commands
                 });
 
                 task.Start();*/
-                // TODO работа с агрегатом разделов, автоматическое создание
-                //throw new NotImplementedException();
+
             }
             catch (Exception ex)
             {

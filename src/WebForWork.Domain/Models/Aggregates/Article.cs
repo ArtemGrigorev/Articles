@@ -69,16 +69,6 @@ namespace WebForWork.Domain.Models.Aggregates
                 order = index
             }).ToList();
             article.CreateDate = timeProvider.GetLocalNow().UtcDateTime;
-
-            /*
-              article.Tags = (from st in sumTags
-                              select new ArticleTag()
-                              {
-                                  article = article,
-                                  tag = newTags.Contains(st) ? st : null,
-                                  tagId = st.Id,
-                              }).ToList();
-            */
             return article;
         }
 
@@ -110,7 +100,6 @@ namespace WebForWork.Domain.Models.Aggregates
                 tagId = tag.Id,
                 order = index
             }).ToList();
-            CreateDate = timeProvider.GetLocalNow().UtcDateTime;
             UpdateDate = timeProvider.GetLocalNow().UtcDateTime;
         }
     }

@@ -2,17 +2,12 @@
 
 namespace WebForWork.WebApi.Models
 {
-    public class UpdateRequestModel
+    public class GetResponseModel
     {
-
-        [Required]
         public string Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
         public IEnumerable<string> Tags { get; set; }
-
     }
 }

@@ -37,6 +37,25 @@ namespace WebForWork.Infrastructure.Repositories
 
         public async Task<Article> GetArticleAsync(ArticleId articleId, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            try
+            {
+                return await _context.Articles
+                    .Where(x => x.Id == articleId)
+                    .Include(x => x.Tags)
+                      .ThenInclude(x => x.tag)
+                    .SingleAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new TagRepositoriesException($"Ошибка получения статьи Id {articleId.Value}", ex);
+            }
+        }
+
+        public async Task<Article> GetArticleAsNoTrackingAsync(ArticleId articleId, CancellationToken cancellationToken)
+        {
 
             if (cancellationToken.IsCancellationRequested)
                 return null; 
