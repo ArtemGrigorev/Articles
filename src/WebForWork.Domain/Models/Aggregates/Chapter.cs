@@ -22,7 +22,6 @@ namespace WebForWork.Domain.Models.Aggregates
         public static Chapter Create(IEnumerable<Tag> tags)
         {
             Chapter chapter = null;
-            var t = tags.ToList();
             try
             {
                 string name = string.Join(", ", tags.Select(x => x.Name.Value).ToArray());

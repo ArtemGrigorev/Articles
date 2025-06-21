@@ -16,12 +16,17 @@ namespace WebForWork.WebApi.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly CreateArticleValidator _validatorModel;
-        public ArticleController(IMediator mediator, IMapper mapper, CreateArticleValidator validatorModel)
+        private readonly CreateArticleValidator _validatorCreateModel;
+        private readonly UpdateArticleValidator _validatorUpdateModel;
+        public ArticleController(IMediator mediator, 
+            IMapper mapper, 
+            CreateArticleValidator validatorCreateModel,
+            UpdateArticleValidator validatorUpdateModel)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validatorModel = validatorModel ?? throw new ArgumentNullException(nameof(validatorModel));
+            _validatorCreateModel = validatorCreateModel ?? throw new ArgumentNullException(nameof(validatorCreateModel));
+            _validatorUpdateModel = validatorUpdateModel ?? throw new ArgumentNullException(nameof(validatorUpdateModel));
         }
 
         [HttpPost]
@@ -30,7 +35,7 @@ namespace WebForWork.WebApi.Controllers
         public async Task<ActionResult<CreateResponseModel>> CreateArticleAsync([FromBody] CreateRequestModel createRequestModel, CancellationToken cancellationToken)
         {
 
-            var validationResult = await _validatorModel.ValidateAsync(createRequestModel, cancellationToken);
+            var validationResult = await _validatorCreateModel.ValidateAsync(createRequestModel, cancellationToken);
             if (!validationResult.IsValid) 
             {
                 validationResult.AddToModelState(ModelState);
@@ -46,5 +51,36 @@ namespace WebForWork.WebApi.Controllers
 
             return StatusCode(StatusCodes.Status500InternalServerError,result);//BadRequest(result);
         }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(UpdateResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CreateResponseModel>> CreateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
+        {
+
+            var validationResult = await _validatorUpdateModel.ValidateAsync(updateRequestModel, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState);
+                return ValidationProblem(ModelState);
+            }
+            // var commant = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
+
+            var commandTests = new UpdateArticleCommand() {
+                Id = Guid.Parse("3054f219-758f-4366-8a06-b7345a58ad93"),
+                Name = "Test",
+                Tags = new Collection<string> { "test1", "test2" }
+            };
+
+            await _mediator.Send(commandTests, cancellationToken);
+
+          //  var result = _mapper.Map<UpdateResponseModel>(resultCommand);
+            return Ok(new UpdateResponseModel() {Message = "Статья обновленна" });
+            /* if (string.IsNullOrEmpty(result.MessageError))
+                 return Ok(result);
+
+             return StatusCode(StatusCodes.Status500InternalServerError, result);//BadRequest(result);*/
+        }
+
     }
 }

@@ -81,5 +81,37 @@ namespace WebForWork.Domain.Models.Aggregates
             */
             return article;
         }
+
+        public void Update(IList<Tag> tags, IEnumerable<string> tagsNames, string name, TimeProvider timeProvider)
+        {
+            if (tagsNames.Count() > invariantCountMaxTags)
+            {
+                throw new ArticleTagsException($"Количество тегов превышает допустимое значение ValueMax = {invariantCountMaxTags}");
+            }
+
+            if (name.Length > invariantLengthMaxName)
+            {
+                throw new ArticleNameException($"Длина имени превышает допустимое значение ValueMax = {invariantLengthMaxName}");
+            }
+
+            if (tagsNames.Distinct().Count() != tagsNames.Count())
+            {
+                throw new ArticleUniqeTagException("Значения тегов в статье не уникально");
+            }
+
+            var existsTags = tags.Select(t => t.Name.Value).ToList();
+            var noExistsTags = tagsNames.Except(existsTags);
+            var newTags = noExistsTags.Select(x => Tag.Create(x)).ToList();
+            var sumTags = newTags.Union(tags);
+            sumTags = sumTags.OrderBy(st => tagsNames.ToList().IndexOf(st.Name.Value)).ToList();
+            Tags = sumTags.Select((tag, index) => new ArticleTag()
+            {
+                tag = newTags.Contains(tag) ? tag : null,
+                tagId = tag.Id,
+                order = index
+            }).ToList();
+            CreateDate = timeProvider.GetLocalNow().UtcDateTime;
+            UpdateDate = timeProvider.GetLocalNow().UtcDateTime;
+        }
     }
 }
