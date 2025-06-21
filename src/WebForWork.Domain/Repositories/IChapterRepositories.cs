@@ -12,6 +12,7 @@ namespace WebForWork.Domain.Repositories
     public interface IChapterRepositories
     {
         Task AddChapterAsync(Chapter chapter, CancellationToken cancellationToken);
+        Task<Chapter> GetChapterAsNoTrackingAsync(ChapterId chapterId, CancellationToken cancellationToken);
         bool ExistChapterByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken);
     }
 }

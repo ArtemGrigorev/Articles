@@ -39,55 +39,6 @@ namespace WebForWork.Infrastructure.Repositories
             }
         }
 
-
-
-        /*
-        public > ChaptersByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken)
-        {
-            var result = new List<Chapter> { };
-            if (cancellationToken.IsCancellationRequested)
-                return result;
-
-            try
-            {
-
-                var chapters = _context.Chapters
-                        .AsNoTracking()
-                        .Include(chapter => chapter.Tags);        
-
-                var chaptersTags = chapters.SelectMany(x => x.Tags).Where(x => tags.Contains(x.tag));
-
-                var existsUniqeChapter = chaptersTags.GroupBy(p => p.tagId)
-                    .Select(g => new { Name = g.Key, Count = g.Count() }).Any(x=>x.Count == tags.Count());
-
-
-                  //  .Select(g => new { Name = g.Key, Count = g.Count() });
-
-
-                //Where(x => x.Tags.SelectMany(z=>z.tag))
-
-                // .SelectMany(ch => ch.Tags)
-
-                // .ThenInclude(ch => ch.)
-                //   .SelectMany(ch => ch.Tags)
-                //  .Where(ch => tags.Contains())
-
-
-              /*  result = await _context.Chapters
-                    .AsNoTracking()
-                    .Where(t => tagNames.Contains(t.Name))
-                    .ToListAsync(cancellationToken);*/
-
-        /*
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ChapterRepositoriesException("Ошибка получения разделов по связанным тегам", ex);
-                    }
-
-                    return result;
-                }
-        */
         public bool ExistChapterByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken)
         {
             bool result = false;
@@ -112,6 +63,30 @@ namespace WebForWork.Infrastructure.Repositories
             }
 
             return result;
+        }
+
+        public async Task<Chapter> GetChapterAsNoTrackingAsync(ChapterId chapterId, CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            try
+            {
+                return await _context.Chapters
+                    .AsNoTracking()
+                    .Where(x => x.Id == chapterId)
+                    .Include(x => x.Tags)
+                      .ThenInclude(x => x.tag)
+                    .SingleAsync(cancellationToken);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ChapterRepositoriesException($"Cтатья не найдена Id = {chapterId.Value}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ChapterRepositoriesException($"Ошибка получения статьи Id = {chapterId.Value}", ex);
+            }
         }
     }
 }

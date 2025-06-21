@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebForWork.Domain.Models.Aggregates;
+using WebForWork.Domain.Models.Entities;
 using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
 using WebForWork.Infrastructure.Exceptions;
@@ -77,6 +78,33 @@ namespace WebForWork.Infrastructure.Repositories
             {
                 throw new ArticleRepositoriesException($"Ошибка получения статьи Id = {articleId.Value}", ex);
             }
+        }
+
+        public async Task<List<Article>> GetArticlesByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken)
+        {
+            var result = new List<Article> { };
+
+            if (cancellationToken.IsCancellationRequested)
+                return result;
+
+            try
+            {
+                var articles = _context.Articles
+                        .AsNoTracking()
+                        .Include(articles => articles.Tags);
+
+                var articlesTags = articles.SelectMany(x => x.Tags)
+                        .Include(x=>x.article)
+                        .Where(x => tags.Contains(x.tag));
+
+                result = await articlesTags.Select(at => at.article).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ArticleRepositoriesException("Ошибка получения стетей в разделе", ex);
+            }
+
+            return result;
         }
     }
 }
