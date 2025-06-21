@@ -1,8 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebForWork.WebApi.Models
+namespace WebForWork.Application.Commands
 {
-    public class GetResponseModel
+    public class GetArticleCommandResult
     {
         public Guid Id { get; set; }
 

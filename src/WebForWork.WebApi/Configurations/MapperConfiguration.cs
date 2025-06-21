@@ -12,6 +12,9 @@ namespace WebForWork.WebApi.Configurations
             CreateMap<CreateArticleCommandResult, CreateResponseModel>();
 
             CreateMap<UpdateRequestModel, UpdateArticleCommand>();
+
+            CreateMap<GetRequestModel, GetArticleCommand>();
+            CreateMap<GetArticleCommandResult, GetResponseModel>();
         }
     }
 }

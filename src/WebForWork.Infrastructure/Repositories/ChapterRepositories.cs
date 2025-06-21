@@ -35,7 +35,7 @@ namespace WebForWork.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new ChapterRepositoriesException($"Ошибка создания раздела {chapter.Id.Value}", ex);
+                throw new ChapterRepositoriesException("Ошибка создания раздела", ex);
             }
         }
 

@@ -43,7 +43,7 @@ namespace WebForWork.Application.Commands
 
                 // сохранение юнитом и запуск интерцепторов
 
-                result.ID = article.Id.Value;
+                result.Id = article.Id.Value;
 
             }
             catch (Exception ex)

@@ -31,7 +31,7 @@ namespace WebForWork.Infrastructure.Repositories
             }
             catch (Exception ex) 
             {
-                throw new TagRepositoriesException($"Ошибка создания статьи Id {article.Id.Value}", ex);
+                throw new ArticleRepositoriesException($"Ошибка создания статьи Id = {article.Id.Value}", ex);
             }
         }
 
@@ -50,7 +50,7 @@ namespace WebForWork.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new TagRepositoriesException($"Ошибка получения статьи Id {articleId.Value}", ex);
+                throw new ArticleRepositoriesException($"Ошибка получения статьи Id = {articleId.Value}", ex);
             }
         }
 
@@ -58,7 +58,7 @@ namespace WebForWork.Infrastructure.Repositories
         {
 
             if (cancellationToken.IsCancellationRequested)
-                return null; 
+                return null;
 
             try
             {
@@ -69,9 +69,13 @@ namespace WebForWork.Infrastructure.Repositories
                       .ThenInclude(x => x.tag)
                     .SingleAsync(cancellationToken);
             }
+            catch(InvalidOperationException ex)
+            {
+                throw new ArticleRepositoriesException($"Cтатья не найдена Id = {articleId.Value}", ex);
+            }
             catch (Exception ex)
             {
-                throw new TagRepositoriesException($"Ошибка получения статьи Id {articleId.Value}", ex);
+                throw new ArticleRepositoriesException($"Ошибка получения статьи Id = {articleId.Value}", ex);
             }
         }
     }

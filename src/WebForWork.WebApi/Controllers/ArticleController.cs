@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
@@ -18,15 +19,18 @@ namespace WebForWork.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly CreateArticleValidator _validatorCreateModel;
         private readonly UpdateArticleValidator _validatorUpdateModel;
+        private readonly GetArticleValidator _validatorGetModel;
         public ArticleController(IMediator mediator, 
             IMapper mapper, 
             CreateArticleValidator validatorCreateModel,
-            UpdateArticleValidator validatorUpdateModel)
+            UpdateArticleValidator validatorUpdateModel,
+            GetArticleValidator validatorGetModel)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validatorCreateModel = validatorCreateModel ?? throw new ArgumentNullException(nameof(validatorCreateModel));
             _validatorUpdateModel = validatorUpdateModel ?? throw new ArgumentNullException(nameof(validatorUpdateModel));
+            _validatorGetModel = validatorGetModel ?? throw new ArgumentNullException(nameof(validatorGetModel));
         }
 
         [HttpPost]
@@ -55,7 +59,7 @@ namespace WebForWork.WebApi.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(UpdateResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CreateResponseModel>> CreateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
+        public async Task<ActionResult<UpdateResponseModel>> CreateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
         {
 
             var validationResult = await _validatorUpdateModel.ValidateAsync(updateRequestModel, cancellationToken);
@@ -83,19 +87,21 @@ namespace WebForWork.WebApi.Controllers
         }
 
 
+      
         [HttpGet]
-        [ProducesResponseType(typeof(UpdateResponseModel), StatusCodes.Status200OK)]
+        [Route("api/article/{id}")]
+        [ProducesResponseType(typeof(GetResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CreateResponseModel>> CreateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
+        public async Task<ActionResult<GetResponseModel>> GetArticleAsync(string id, CancellationToken cancellationToken)
         {
-
-            var validationResult = await _validatorUpdateModel.ValidateAsync(updateRequestModel, cancellationToken);
+            var getRequestModel = new GetRequestModel() { Id = id };
+            var validationResult = await _validatorGetModel.ValidateAsync(getRequestModel, cancellationToken);
             if (!validationResult.IsValid)
             {
                 validationResult.AddToModelState(ModelState);
                 return ValidationProblem(ModelState);
             }
-            var command = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
+            var command = _mapper.Map<GetArticleCommand>(getRequestModel);
 
             /*  var commandTests = new UpdateArticleCommand() {
                   Id = Guid.Parse("3054f219-758f-4366-8a06-b7345a58ad93"),
@@ -103,14 +109,14 @@ namespace WebForWork.WebApi.Controllers
                   Tags = new Collection<string> { "test2", "test1", "test3" }
               };
             */
-            await _mediator.Send(command, cancellationToken);
+            var resultCommand = await _mediator.Send(command, cancellationToken);
 
-            //  var result = _mapper.Map<UpdateResponseModel>(resultCommand);
-            return Ok(new UpdateResponseModel() { Message = "Статья обновленна" });
-            /* if (string.IsNullOrEmpty(result.MessageError))
+            var result = _mapper.Map<GetResponseModel>(resultCommand);
+
+            if (string.IsNullOrEmpty(result.MessageError))
                  return Ok(result);
 
-             return StatusCode(StatusCodes.Status500InternalServerError, result);//BadRequest(result);*/
+             return StatusCode(StatusCodes.Status500InternalServerError, result);
         }
 
     }
