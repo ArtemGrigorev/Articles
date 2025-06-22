@@ -14,5 +14,6 @@ namespace WebForWork.Domain.Models.Entities
         public Chapter chapter { get; set; }
         public TagId tagId { get; set; }
         public Tag tag { get; set; }
+        public int order { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using WebForWork.Infrastructure;
 namespace WebForWork.Infrastructure.Migrations
 {
     [DbContext(typeof(WebForWorkDbContext))]
-    [Migration("20250621082648_Chapter")]
-    partial class Chapter
+    [Migration("20250622134805_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,10 @@ namespace WebForWork.Infrastructure.Migrations
 
                     b.Property<Guid>("chapterId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("order")
+                        .HasColumnType("integer")
+                        .HasColumnName("order");
 
                     b.HasKey("tagId", "chapterId");
 

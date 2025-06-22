@@ -92,6 +92,10 @@ namespace WebForWork.Infrastructure.Migrations
                     b.Property<Guid>("chapterId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("order")
+                        .HasColumnType("integer")
+                        .HasColumnName("order");
+
                     b.HasKey("tagId", "chapterId");
 
                     b.HasIndex("chapterId");

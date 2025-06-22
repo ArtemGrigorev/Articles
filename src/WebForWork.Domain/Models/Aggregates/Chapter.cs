@@ -32,6 +32,7 @@ namespace WebForWork.Domain.Models.Aggregates
                 {
                     chapter = chapter,
                     tagId = tag.Id,
+                    order = index
                 }).ToList();
             }
             catch (Exception ex)
