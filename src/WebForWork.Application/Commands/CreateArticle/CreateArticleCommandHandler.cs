@@ -10,7 +10,7 @@ using WebForWork.Domain.Models.Aggregates;
 using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
 
-namespace WebForWork.Application.Commands
+namespace WebForWork.Application.Commands.CreateArticle
 {
     public class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand, CreateArticleCommandResult>
     {

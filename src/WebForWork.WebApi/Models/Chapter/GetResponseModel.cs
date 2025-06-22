@@ -7,7 +7,7 @@ namespace WebForWork.WebApi.Models.Chapter
 
         public string Name { get; set; } = string.Empty;
 
-        public IEnumerable<NameAndIdArticlePresentDto> ArticlesAttributes { get; set; }
+        public IEnumerable<AttributesPresentsDto> ArticlesAttributes { get; set; }
 
         public string MessageError { get; set; } = string.Empty;
     }

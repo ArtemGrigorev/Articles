@@ -60,6 +60,7 @@ namespace WebForWork.Infrastructure.Repositories
             {
                  throw new TagRepositoriesException("Ошибка получения тегов по названиям", ex);
             }
+
             return result;
         }
     }

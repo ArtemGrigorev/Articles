@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebForWork.Application.Commands
+namespace WebForWork.Application.Commands.GetChaptersCatalog
 {
-    public class CreateArticleCommandResult
+    public class GetChaptersCatalogResult
     {
-        public Guid Id { get; set; }
-
+        public IEnumerable<AttributesApplicationDTO> Attributes { get; set; }
         public string MessageError { get; set; } = string.Empty;
+
     }
 }

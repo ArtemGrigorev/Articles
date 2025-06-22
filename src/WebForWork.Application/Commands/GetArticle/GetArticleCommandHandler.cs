@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
 
-namespace WebForWork.Application.Commands
+namespace WebForWork.Application.Commands.GetArticle
 {
     public class GetArticleCommandHandler : IRequestHandler<GetArticleCommand, GetArticleCommandResult>
     {

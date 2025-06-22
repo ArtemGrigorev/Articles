@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebForWork.Domain.Events;
+using WebForWork.Domain.Models;
 using WebForWork.Domain.Models.Aggregates;
 using WebForWork.Domain.Models.Entities;
 using WebForWork.Domain.Models.ValueObject;
@@ -39,12 +41,9 @@ namespace WebForWork.Infrastructure.Repositories
             }
         }
 
-        public bool ExistChapterByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken)
+        public bool ExistChapterByTags(IEnumerable<Tag> tags)
         {
             bool result = false;
-
-            if (cancellationToken.IsCancellationRequested)
-                return result;
 
             try
             {
@@ -87,6 +86,40 @@ namespace WebForWork.Infrastructure.Repositories
             {
                 throw new ChapterRepositoriesException($"Ошибка получения статьи Id = {chapterId.Value}", ex);
             }
+        }
+
+        public List<ChaptersCatalogDTO> GetChaptersAsNoTracking(byte page)
+        {
+            const byte size = 10;
+            var result = new List<ChaptersCatalogDTO> { };
+
+            try
+            {
+
+                result = _context.Chapters.AsNoTracking()
+                      .Include(x => x.Tags)
+                      .ThenInclude(x => x.tag)
+                      .GroupJoin(
+                            _context.Articles.AsNoTracking()
+                      .Include(x => x.Tags)
+                      .ThenInclude(x => x.tag),
+                       ch => ch.Tags.Select(x => x.tag),
+                          a => a.Tags.Select(x => x.tag),
+                            (ch, a) => new ChaptersCatalogDTO()
+                            {
+                                Chapter = ch,
+                                Count = a.Count(),
+                            })
+                      .Skip((page-1) * size)
+                      .Take(size)
+                      .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ChapterRepositoriesException($"Ошибка получения каталога разделов", ex);
+            }
+
+            return result;
         }
     }
 }

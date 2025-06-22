@@ -9,7 +9,7 @@ using WebForWork.Domain.Events;
 using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
 
-namespace WebForWork.Application.Commands
+namespace WebForWork.Application.Commands.UpdateArticle
 {
     public class UpdateArticleCommandHandler : IRequestHandler<UpdateArticleCommand>
     {

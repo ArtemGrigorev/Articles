@@ -8,14 +8,14 @@ using WebForWork.Domain.Models.Aggregates;
 using WebForWork.Domain.Models.ValueObject;
 using WebForWork.Domain.Repositories;
 
-namespace WebForWork.Application.Commands
+namespace WebForWork.Application.Commands.GetChapterWithArticles
 {
-    public class GetArticlesInChapterHandler : IRequestHandler<GetArticlesInChapterCommand, GetArticlesInChapterResult>
+    public class GetArticlesInChapterCommandHandler : IRequestHandler<GetArticlesInChapterCommand, GetArticlesInChapterResult>
     {
         private readonly IChapterRepositories _chapterRepositories;
         private readonly IArticleRepositories _articleRepositories;
 
-        public GetArticlesInChapterHandler(IChapterRepositories chapterRepositories,
+        public GetArticlesInChapterCommandHandler(IChapterRepositories chapterRepositories,
             IArticleRepositories articleRepositories)
         {
             _chapterRepositories = chapterRepositories ?? throw new ArgumentNullException(nameof(chapterRepositories));
@@ -31,11 +31,11 @@ namespace WebForWork.Application.Commands
                 var chapter = await _chapterRepositories.GetChapterAsNoTrackingAsync(chapterId, cancellationToken);
                 var tags = chapter.Tags.Select(x => x.tag);
                 var articles = await _articleRepositories.GetArticlesByTagsAsync(tags, cancellationToken);
-                articles = articles.OrderByDescending(x => (x.UpdateDate != DateTime.MinValue ? x.UpdateDate : x.CreateDate)).ToList();
+                articles = articles.OrderByDescending(x => x.UpdateDate != DateTime.MinValue ? x.UpdateDate : x.CreateDate).ToList();
                 result.Id = chapterId.Value;
                 result.Name = chapter.Name.Value;
-                result.ArticlesAttributes = articles.Select(a =>
-                    new NameAndIdArticleDtoApplicationDTO()
+                result.Attributes = articles.Select(a =>
+                    new AttributesApplicationDTO()
                     {
                         Id = a.Id.Value,
                         Name = a.Name.Value

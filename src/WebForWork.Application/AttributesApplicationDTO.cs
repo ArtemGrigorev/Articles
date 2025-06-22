@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebForWork.Application
 {
-    public sealed class NameAndIdArticleDtoApplicationDTO
+    public sealed class AttributesApplicationDTO
     {
         public Guid Id { get; init; }
         public string Name { get; init; }

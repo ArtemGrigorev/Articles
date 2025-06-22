@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebForWork.Application.Commands
+namespace WebForWork.Application.Commands.UpdateArticle
 {
-    public class CreateArticleCommand : IRequest<CreateArticleCommandResult>
+    public class UpdateArticleCommand : IRequest
     {
-        public string Name  { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         public IEnumerable<string> Tags { get; set; }
     }
 }

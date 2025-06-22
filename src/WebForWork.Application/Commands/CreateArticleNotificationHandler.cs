@@ -32,7 +32,7 @@ namespace WebForWork.Application.Commands
 
                 var article = await _articleRepositories.GetArticleAsNoTrackingAsync(notification.ArticleId, cancellationToken);
                 var tags = article.Tags.Select(x => x.tag);
-                var exist = _chapterRepositories.ExistChapterByTagsAsync(tags, cancellationToken);
+                var exist = _chapterRepositories.ExistChapterByTags(tags);
 
                 if (!exist)
                 {

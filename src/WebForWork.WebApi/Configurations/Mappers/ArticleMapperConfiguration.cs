@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using WebForWork.Application;
-using WebForWork.Application.Commands;
+using WebForWork.Application.Commands.CreateArticle;
+using WebForWork.Application.Commands.GetArticle;
+using WebForWork.Application.Commands.UpdateArticle;
 using WebForWork.WebApi.Models.Article;
 
 namespace WebForWork.WebApi.Configurations.Mappers
