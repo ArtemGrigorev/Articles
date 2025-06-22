@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using WebForWork.Application.Commands;
 using WebForWork.Domain.Events;
 using WebForWork.WebApi.Configurations;
+using WebForWork.WebApi.Configurations.ArticleValidator;
 using WebForWork.WebApi.Models;
+using WebForWork.WebApi.Models.Article;
 
 namespace WebForWork.WebApi.Controllers
 {
@@ -59,7 +61,7 @@ namespace WebForWork.WebApi.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(UpdateResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UpdateResponseModel>> CreateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
+        public async Task<ActionResult<UpdateResponseModel>> UpdateArticleAsync([FromBody] UpdateRequestModel updateRequestModel, CancellationToken cancellationToken)
         {
 
             var validationResult = await _validatorUpdateModel.ValidateAsync(updateRequestModel, cancellationToken);
@@ -68,18 +70,11 @@ namespace WebForWork.WebApi.Controllers
                 validationResult.AddToModelState(ModelState);
                 return ValidationProblem(ModelState);
             }
-             var command = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
-
-          /*  var commandTests = new UpdateArticleCommand() {
-                Id = Guid.Parse("3054f219-758f-4366-8a06-b7345a58ad93"),
-                Name = "Test",
-                Tags = new Collection<string> { "test2", "test1", "test3" }
-            };
-          */
+            var command = _mapper.Map<UpdateArticleCommand>(updateRequestModel);
             await _mediator.Send(command, cancellationToken);
 
           //  var result = _mapper.Map<UpdateResponseModel>(resultCommand);
-            return Ok(new UpdateResponseModel() {Message = "Статья обновленна" });
+            return Ok(new UpdateResponseModel() {Message = "Статья обновлена" });
             /* if (string.IsNullOrEmpty(result.MessageError))
                  return Ok(result);
 
@@ -102,15 +97,7 @@ namespace WebForWork.WebApi.Controllers
                 return ValidationProblem(ModelState);
             }
             var command = _mapper.Map<GetArticleCommand>(getRequestModel);
-
-            /*  var commandTests = new UpdateArticleCommand() {
-                  Id = Guid.Parse("3054f219-758f-4366-8a06-b7345a58ad93"),
-                  Name = "Test",
-                  Tags = new Collection<string> { "test2", "test1", "test3" }
-              };
-            */
             var resultCommand = await _mediator.Send(command, cancellationToken);
-
             var result = _mapper.Map<GetResponseModel>(resultCommand);
 
             if (string.IsNullOrEmpty(result.MessageError))
@@ -118,6 +105,5 @@ namespace WebForWork.WebApi.Controllers
 
              return StatusCode(StatusCodes.Status500InternalServerError, result);
         }
-
     }
 }

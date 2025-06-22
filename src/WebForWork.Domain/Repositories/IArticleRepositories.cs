@@ -14,6 +14,6 @@ namespace WebForWork.Domain.Repositories
         Task AddArticleAsync(Article article, CancellationToken cancellationToken);
         Task<Article> GetArticleAsNoTrackingAsync(ArticleId articleId, CancellationToken cancellationToken);
         Task<Article> GetArticleAsync(ArticleId articleId, CancellationToken cancellationToken);
-        Task<List<Article>> GetArticlesByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken)
+        Task<List<Article>> GetArticlesByTagsAsync(IEnumerable<Tag> tags, CancellationToken cancellationToken);
     }
 }

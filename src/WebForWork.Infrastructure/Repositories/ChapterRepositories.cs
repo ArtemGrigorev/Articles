@@ -55,7 +55,7 @@ namespace WebForWork.Infrastructure.Repositories
                 var chaptersTags = chapters.SelectMany(x => x.Tags).Where(x => tags.Contains(x.tag));
 
                 result = chaptersTags.GroupBy(p => p.tagId)
-                    .Select(g => new { Count = g.Count() }).Any(x => x.Count == tags.Count());
+                    .Select(g => new { Count = g.Count() }).Any(x => x.Count >= tags.Count());
             }
             catch (Exception ex)
             {

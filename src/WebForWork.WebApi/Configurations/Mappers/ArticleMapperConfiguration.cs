@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using WebForWork.Application;
 using WebForWork.Application.Commands;
-using WebForWork.WebApi.Models;
+using WebForWork.WebApi.Models.Article;
 
-namespace WebForWork.WebApi.Configurations
+namespace WebForWork.WebApi.Configurations.Mappers
 {
-    public class MapperConfiguration : Profile
+    public class ArticleMapperConfiguration : Profile
     {
-        public MapperConfiguration() 
+        public ArticleMapperConfiguration() 
         {
             CreateMap<CreateRequestModel, CreateArticleCommand>();
             CreateMap<CreateArticleCommandResult, CreateResponseModel>();
@@ -15,6 +16,7 @@ namespace WebForWork.WebApi.Configurations
 
             CreateMap<GetRequestModel, GetArticleCommand>();
             CreateMap<GetArticleCommandResult, GetResponseModel>();
+          
         }
     }
 }

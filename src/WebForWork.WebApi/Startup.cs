@@ -4,7 +4,7 @@ using WebForWork.Application.Extensions;
 using WebForWork.Domain.Repositories;
 using WebForWork.Infrastructure.Extensions;
 using WebForWork.Infrastructure.Repositories;
-using WebForWork.WebApi.Configurations;
+using WebForWork.WebApi.Configurations.ArticleValidator;
 
 namespace WebForWork.WebApi
 {

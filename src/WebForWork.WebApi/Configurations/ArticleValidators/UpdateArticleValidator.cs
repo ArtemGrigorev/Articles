@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
 using WebForWork.Domain.Models.Aggregates;
-using WebForWork.Domain.Models.ValueObject;
-using WebForWork.WebApi.Models;
+using WebForWork.WebApi.Models.Article;
 
-namespace WebForWork.WebApi.Configurations
+namespace WebForWork.WebApi.Configurations.ArticleValidator
 {
-    public class CreateArticleValidator : AbstractValidator<CreateRequestModel>
+    public class UpdateArticleValidator : AbstractValidator<UpdateRequestModel>
     {
-        public CreateArticleValidator() 
+        public UpdateArticleValidator()
         {
+            RuleFor(x => x.Id).Must(x => Guid.TryParse(x, out var guid))
+                   .WithMessage("Значение индентификатора не является Guid");
             RuleFor(x => x.Tags).Must(x => x.Distinct().Count() == x.Count())
                     .WithMessage("Значения тегов в статье не уникально");
             RuleFor(x => x.Name).Length(1, Article.invariantLengthMaxName)

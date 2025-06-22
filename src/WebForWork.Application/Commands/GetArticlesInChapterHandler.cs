@@ -15,7 +15,7 @@ namespace WebForWork.Application.Commands
         private readonly IChapterRepositories _chapterRepositories;
         private readonly IArticleRepositories _articleRepositories;
 
-        public GetArticlesInChapterHandler(IChapterRepositories chapterRepositories, 
+        public GetArticlesInChapterHandler(IChapterRepositories chapterRepositories,
             IArticleRepositories articleRepositories)
         {
             _chapterRepositories = chapterRepositories ?? throw new ArgumentNullException(nameof(chapterRepositories));
@@ -24,8 +24,6 @@ namespace WebForWork.Application.Commands
 
         public async Task<GetArticlesInChapterResult> Handle(GetArticlesInChapterCommand request, CancellationToken cancellationToken)
         {
-
-
             var result = new GetArticlesInChapterResult();
             try
             {
@@ -33,13 +31,17 @@ namespace WebForWork.Application.Commands
                 var chapter = await _chapterRepositories.GetChapterAsNoTrackingAsync(chapterId, cancellationToken);
                 var tags = chapter.Tags.Select(x => x.tag);
                 var articles = await _articleRepositories.GetArticlesByTagsAsync(tags, cancellationToken);
-
-                var t = articles.OrderByDescending(x => (x.UpdateDate != DateTime.MinValue ? x.UpdateDate : x.CreateDate));
-
-        /*    result.Id = articleId.Value;
-            result.Name = article.Name.Value;
-            result.Tags = sortTags;*/
-    }
+                articles = articles.OrderByDescending(x => (x.UpdateDate != DateTime.MinValue ? x.UpdateDate : x.CreateDate)).ToList();
+                result.Id = chapterId.Value;
+                result.Name = chapter.Name.Value;
+                result.ArticlesAttributes = articles.Select(a =>
+                    new NameAndIdArticleDtoApplicationDTO()
+                    {
+                        Id = a.Id.Value,
+                        Name = a.Name.Value
+                    }
+                ).ToList();
+            }
             catch (Exception ex)
             {
                 result.MessageError = ex.Message;
@@ -48,5 +50,5 @@ namespace WebForWork.Application.Commands
             return result;
         }
     }
-    }
 }
+

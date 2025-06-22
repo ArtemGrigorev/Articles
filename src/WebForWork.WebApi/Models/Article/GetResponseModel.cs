@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebForWork.WebApi.Models
+namespace WebForWork.WebApi.Models.Article
 {
     public class GetResponseModel
     {

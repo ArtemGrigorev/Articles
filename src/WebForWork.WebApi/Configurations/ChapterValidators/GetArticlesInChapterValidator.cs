@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using WebForWork.WebApi.Models;
+using WebForWork.WebApi.Models.Chapter;
 
-namespace WebForWork.WebApi.Configurations
+namespace WebForWork.WebApi.Configurations.ChapterValidators
 {
-    public class GetArticleValidator : AbstractValidator<GetRequestModel>
+    public class GetArticlesInChapterValidator : AbstractValidator<GetRequestModel>
     {
-        public GetArticleValidator() 
+        public GetArticlesInChapterValidator()
         {
             RuleFor(x => x.Id).Must(x => Guid.TryParse(x, out var guid))
                  .WithMessage("Значение индентификатора не является Guid");
