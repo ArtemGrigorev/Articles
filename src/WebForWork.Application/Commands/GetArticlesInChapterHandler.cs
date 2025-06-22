@@ -34,7 +34,7 @@ namespace WebForWork.Application.Commands
                 var tags = chapter.Tags.Select(x => x.tag);
                 var articles = await _articleRepositories.GetArticlesByTagsAsync(tags, cancellationToken);
 
-              //  var t = articles.OrderByDescending(x => (x.UpdateDate ?? x.CreateDate));
+                var t = articles.OrderByDescending(x => (x.UpdateDate != DateTime.MinValue ? x.UpdateDate : x.CreateDate));
 
         /*    result.Id = articleId.Value;
             result.Name = article.Name.Value;
