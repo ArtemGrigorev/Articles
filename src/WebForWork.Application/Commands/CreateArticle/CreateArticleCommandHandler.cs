@@ -33,18 +33,13 @@ namespace WebForWork.Application.Commands.CreateArticle
             var result = new CreateArticleCommandResult();
             try
             {
-
                 var tagNames = request.Tags.Select(x => new TagName(x));
                 var tags = await _tagRepositories.GetTagsByNamesAsync(tagNames, cancellationToken);
                 var article = Article.Create(tags, request.Tags, request.Name, _timeProvider);
                 article.AddDomainEvents(new CreatedArticleEvent(article.Id));
                 await _articleRepositories.AddArticleAsync(article, cancellationToken);
                 await _unitOfWork.SaveChangesAsync();
-
-                // сохранение юнитом и запуск интерцепторов
-
                 result.Id = article.Id.Value;
-
             }
             catch (Exception ex)
             {

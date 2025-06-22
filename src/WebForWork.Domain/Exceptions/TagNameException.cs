@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebForWork.Domain.Exceptions
 {
-    internal class TagNameException : DomainException
+    public class TagNameException : DomainException
     {
-        internal TagNameException(string message) : base(message)
+        public TagNameException(string message) : base(message)
         { 
         }
     }

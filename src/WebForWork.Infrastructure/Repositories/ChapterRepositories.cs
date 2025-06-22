@@ -92,11 +92,11 @@ namespace WebForWork.Infrastructure.Repositories
         {
             const byte size = 10;
             var result = new List<ChaptersCatalogDTO> { };
-
+            int limit = (page - 1) * size;
             try
             {
-
-                result = _context.Chapters.AsNoTracking()
+                // EF не смог собрать запрос к бд Постгрес
+                /*result = _context.Chapters.AsNoTracking()
                       .Include(x => x.Tags)
                       .ThenInclude(x => x.tag)
                       .GroupJoin(
@@ -112,7 +112,17 @@ namespace WebForWork.Infrastructure.Repositories
                             })
                       .Skip((page-1) * size)
                       .Take(size)
-                      .ToList();
+                      .ToList();*/
+
+                result = _context.Database.SqlQuery<ChaptersCatalogDTO>
+                    ($@"SELECT c.name,c.id, COUNT(c.id) AS count FROM webforwork.chapters AS c
+                     INNER JOIN webforwork.chapters_tags AS ct ON ct.""chapterId"" = c.""id""
+                     INNER JOIN webforwork.articles_tags AS art ON art.""tagId"" = ct.""tagId""
+                     GROUP BY c.""id""
+                     ORDER BY count DESC LIMIT {size} OFFSET {limit}")
+                    .AsEnumerable()
+                    .ToList();
+
             }
             catch (Exception ex)
             {

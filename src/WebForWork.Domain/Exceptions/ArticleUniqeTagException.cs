@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebForWork.Domain.Exceptions
 {
-    internal class ArticleUniqeTagException: DomainException
+    internal class ArticleUniqueTagException: DomainException
     {
-        internal ArticleUniqeTagException(string message) : base(message)
+        internal ArticleUniqueTagException(string message) : base(message)
         { }
     }
 }

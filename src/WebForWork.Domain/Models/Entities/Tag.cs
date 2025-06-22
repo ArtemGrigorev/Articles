@@ -28,6 +28,10 @@ namespace WebForWork.Domain.Models.Entities
             {
                 throw new TagNameException($"Длина имени = {name} превышает допустимое значение ValueMax = {invariantLengthMaxName}");
             }
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new TagNameException($"Имя тега не может быть пустым");
+            }
             Tag tag = new Tag(new TagId(Guid.NewGuid()), new TagName(name));
 
             return tag;

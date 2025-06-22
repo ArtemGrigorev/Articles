@@ -2,7 +2,7 @@
 {
     public class GetCatalogResponseModel
     {
-        public IEnumerable<AttributesPresentsDto> ArticlesAttributes { get; set; }
+        public IEnumerable<AttributesPresentsDto> Attributes { get; set; }
 
         public string MessageError { get; set; } = string.Empty;
     }

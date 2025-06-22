@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebForWork.Domain.Exceptions
 {
-    internal class ArticleTagsException : DomainException
+    public class ArticleTagsException : DomainException
     {
-        internal ArticleTagsException(string message) : base(message) 
+        public ArticleTagsException(string message) : base(message) 
         { }
     }
 }

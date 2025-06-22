@@ -36,7 +36,7 @@ namespace WebForWork.Domain.Models.Aggregates
         /// <returns></returns>
         /// <exception cref="ArticleTagsException"></exception>
         /// <exception cref="ArticleNameException"></exception>
-        /// <exception cref="ArticleUniqeTagException"></exception>
+        /// <exception cref="ArticleUniqueTagException"></exception>
         public static Article Create(IList<Tag> tags, IEnumerable<string> tagsNames, string name, TimeProvider timeProvider)
         {
             
@@ -53,7 +53,7 @@ namespace WebForWork.Domain.Models.Aggregates
 
             if (tagsNames.Distinct().Count() != tagsNames.Count())
             {
-                throw new ArticleUniqeTagException("Значения тегов в статье не уникально");
+                throw new ArticleUniqueTagException("Значения тегов в статье не уникально");
             }
             var existsTags = tags.Select(t => t.Name.Value).ToList();
             var noExistsTags = tagsNames.Except(existsTags);
@@ -86,7 +86,7 @@ namespace WebForWork.Domain.Models.Aggregates
 
             if (tagsNames.Distinct().Count() != tagsNames.Count())
             {
-                throw new ArticleUniqeTagException("Значения тегов в статье не уникально");
+                throw new ArticleUniqueTagException("Значения тегов в статье не уникально");
             }
 
             var existsTags = tags.Select(t => t.Name.Value).ToList();

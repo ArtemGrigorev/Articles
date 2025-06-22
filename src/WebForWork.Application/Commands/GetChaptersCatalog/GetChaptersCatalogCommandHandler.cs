@@ -25,14 +25,14 @@ namespace WebForWork.Application.Commands.GetChaptersCatalog
             var result = new GetChaptersCatalogResult();
             try
             {
-                var catalog = _chapterRepositories.GetChaptersAsNoTracking(request.Page)
-                                                .OrderBy(x => x.Count);
+                var catalog = _chapterRepositories.GetChaptersAsNoTracking(request.Page);
+                                                
 
                 result.Attributes = catalog.Select(c =>
                     new AttributesApplicationDTO()
                     {
-                        Id = c.Chapter.Id.Value,
-                        Name = c.Chapter.Name.Value
+                        Id = c.Id,
+                        Name = c.Name
                     }
                 ).ToList();
             }

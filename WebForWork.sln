@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForWork.Domain", "src\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForWork.Infrastructure", "src\WebForWork.Infrastructure\WebForWork.Infrastructure.csproj", "{08428C3F-1F6F-70D0-90AE-73ACAE48AA16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForWork.Application.Tests", "tests\WebForWork.Application.Tests\WebForWork.Application.Tests.csproj", "{57CCF36C-17FE-AFCA-7828-DE0BB62181EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebForWork.Domain.Tests", "tests\WebForWork.Application.Tests\WebForWork.Domain.Tests.csproj", "{57CCF36C-17FE-AFCA-7828-DE0BB62181EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
