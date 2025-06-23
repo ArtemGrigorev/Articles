@@ -26,7 +26,7 @@ namespace WebForWork.Infrastructure.Extensions
             services.AddTransient<IScopeRepositories, ScopeRepositories>();
             services.AddScoped<PublishDomainEventsInterceptors>();
 
-            services.AddDbContextPool<WebForWorkDbContext>((sp, opt) => 
+            services.AddDbContext<WebForWorkDbContext>((sp, opt) => 
             {
                 opt.UseNpgsql(configuration.GetConnectionString("DatabaseSettings"),
                 contexOptions =>
