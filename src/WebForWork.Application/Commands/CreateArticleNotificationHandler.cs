@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using WebForWork.Domain.Events;
@@ -12,34 +14,32 @@ namespace WebForWork.Application.Commands
 {
     public class CreateArticleNotificationHandler : INotificationHandler<CreatedArticleEvent>
     {
-        private readonly IArticleRepositories _articleRepositories;
-        private readonly IChapterRepositories _chapterRepositories;
-        private readonly IUnitOfWork _unitOfWork;
-        public CreateArticleNotificationHandler(IArticleRepositories articleRepositories, 
-            IChapterRepositories chapterRepositories,
-            IUnitOfWork unitOfWork)
+        private readonly IScopeRepositories _scopeRepositories;
+        public CreateArticleNotificationHandler(
+            IServiceScopeFactory serviceScopeFactory,
+            IScopeRepositories scopeRepositories)
         {
-            _articleRepositories = articleRepositories ?? throw new ArgumentNullException(nameof(articleRepositories));
-            _chapterRepositories = chapterRepositories ?? throw new ArgumentNullException(nameof(chapterRepositories)); 
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _scopeRepositories = scopeRepositories ?? throw new ArgumentNullException(nameof(scopeRepositories));
         }
 
         public async Task Handle(CreatedArticleEvent notification, CancellationToken cancellationToken)
         {
-
             try
             {
-                var article = await _articleRepositories.GetArticleAsNoTrackingAsync(notification.ArticleId, cancellationToken);
-                var tags = article.Tags.OrderBy(x=>x.order).Select(x => x.tag);
-                var exist = _chapterRepositories.ExistChapterByTags(tags);
-
-                if (!exist)
+                Task task = new Task(async () =>
                 {
-                    var chapter = Chapter.Create(tags);
-                    await  _chapterRepositories.AddChapterAsync(chapter, cancellationToken);
-                    await _unitOfWork.SaveChangesAsync();
-                }
+                    var article = await _scopeRepositories.GetArticleAsNoTrackingScopeAsync(notification.ArticleId, cancellationToken);
+                    var tags = article.Tags.OrderBy(x => x.order).Select(x => x.tag);
+                    var exist = _scopeRepositories.ExistChapterByTagsScope(tags);
 
+                    if (!exist)
+                    {
+                        var chapter = Chapter.Create(tags);
+                        await _scopeRepositories.AddAndSaveChapterScopeAsync(chapter, cancellationToken);
+                    }
+                }
+                );
+                task.Start();
             }
             catch (Exception ex)
             {
