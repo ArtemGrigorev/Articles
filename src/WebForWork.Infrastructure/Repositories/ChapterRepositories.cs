@@ -47,14 +47,17 @@ namespace WebForWork.Infrastructure.Repositories
 
             try
             {
-                var chapters = _context.Chapters
-                        .AsNoTracking()
-                        .Include(chapter => chapter.Tags);
+                var chaptersTags = _context.Chapters
+                    .AsNoTracking()
+                    .Include(chapter => chapter.Tags)
+                    .SelectMany(x => x.Tags);
 
-                var chaptersTags = chapters.SelectMany(x => x.Tags).Where(x => tags.Contains(x.tag));
+                var exceptTags = chaptersTags.Where(x => tags.Select(x => x.Id).Contains(x.tag.Id));
 
-                result = chaptersTags.GroupBy(p => p.tagId)
-                    .Select(g => new { Count = g.Count() }).Any(x => x.Count >= tags.Count());
+                result = exceptTags
+                      .GroupBy(p => p.chapterId)
+                      .Select(g => new { ChapteId = g.Key, Count = g.Count() })
+                      .Any(x => x.Count >= tags.Count());
             }
             catch (Exception ex)
             {
@@ -95,34 +98,17 @@ namespace WebForWork.Infrastructure.Repositories
             int limit = (page - 1) * size;
             try
             {
-                // EF не смог собрать запрос к бд Постгрес
-                /*result = _context.Chapters.AsNoTracking()
-                      .Include(x => x.Tags)
-                      .ThenInclude(x => x.tag)
-                      .GroupJoin(
-                            _context.Articles.AsNoTracking()
-                      .Include(x => x.Tags)
-                      .ThenInclude(x => x.tag),
-                       ch => ch.Tags.Select(x => x.tag),
-                          a => a.Tags.Select(x => x.tag),
-                            (ch, a) => new ChaptersCatalogDTO()
-                            {
-                                Chapter = ch,
-                                Count = a.Count(),
-                            })
-                      .Skip((page-1) * size)
-                      .Take(size)
-                      .ToList();*/
-
                 result = _context.Database.SqlQuery<ChaptersCatalogDTO>
-                    ($@"SELECT c.name,c.id, COUNT(c.id) AS count FROM webforwork.chapters AS c
-                     INNER JOIN webforwork.chapters_tags AS ct ON ct.""chapterId"" = c.""id""
-                     INNER JOIN webforwork.articles_tags AS art ON art.""tagId"" = ct.""tagId""
-                     GROUP BY c.""id""
-                     ORDER BY count DESC LIMIT {size} OFFSET {limit}")
-                    .AsEnumerable()
-                    .ToList();
-
+                   ($@"SELECT t2.""name"" , t2.id , count(t2.id) as count
+                         FROM webforwork.chapters t2   inner join             
+                          (SELECT  distinct(art.""id"") idart, c0.id as id FROM webforwork.chapters AS c0
+                          INNER JOIN webforwork.chapters_tags AS ct ON ct.""chapterId"" = c0.""id""
+                          INNER JOIN webforwork.articles_tags AS artt ON artt.""tagId"" = ct.""tagId""
+                          INNER JOIN webforwork.articles AS art ON art.""id"" = artt.""articleId"") t1 ON t1.id = t2.id
+                         GROUP BY (t2.id)
+                         ORDER BY count DESC LIMIT {size} OFFSET {limit}")
+                   .AsEnumerable()
+                   .ToList();
             }
             catch (Exception ex)
             {

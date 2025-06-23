@@ -31,7 +31,7 @@ namespace WebForWork.WebApi.Controllers
         }
         
         [HttpGet]
-        [Route("api/chapter_with_articles/{id}")]
+        [Route("api/chapter_and_articles/{id}")]
         [ProducesResponseType(typeof(GetResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<GetResponseModel>> GetArticlesInChapterAsync(string id, CancellationToken cancellationToken)

@@ -94,10 +94,10 @@ namespace WebForWork.Infrastructure.Repositories
                         .Include(articles => articles.Tags);
 
                 var articlesTags = articles.SelectMany(x => x.Tags)
-                        .Include(x => x.article)
+                      //  .Include(x => x.article)
                         .Where(x => tags.Contains(x.tag));
 
-                result = await articlesTags.Select(at => at.article).ToListAsync();
+                result = await articlesTags.Select(at => at.article).Distinct().ToListAsync();
             }
             catch (Exception ex)
             {

@@ -29,7 +29,6 @@ namespace WebForWork.Application.Commands
 
             try
             {
-
                 var article = await _articleRepositories.GetArticleAsNoTrackingAsync(notification.ArticleId, cancellationToken);
                 var tags = article.Tags.OrderBy(x=>x.order).Select(x => x.tag);
                 var exist = _chapterRepositories.ExistChapterByTags(tags);
@@ -41,27 +40,11 @@ namespace WebForWork.Application.Commands
                     await _unitOfWork.SaveChangesAsync();
                 }
 
-
-
-
-/*
-                Task task = new Task(() =>
-                {
-                    while (true)
-                    {
-                        Thread.Sleep(1000);
-                        Console.WriteLine("Hello Task!");
-                    }
-                });
-
-                task.Start();*/
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
     }
 }
